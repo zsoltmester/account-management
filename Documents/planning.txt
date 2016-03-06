@@ -1,0 +1,59 @@
+# Követelményelemzés
+
+## Célkitűzés
+
+Olyan applikáció készítése, ami egy bank ügyfeleinek számlakezelését oldja meg. Az alkalmazás funkciói:
+- A programba a munkatársnak előbb be kell jelentkeznie a felhasználónév és jelszó megadásával, csak úgy végezhet bármilyen műveletet, és láthat bármilyen adatot. 10 perc inaktivitás után a jelszót újra meg kell adni.
+- A programban megtekinthetőek az ügyfelek adatai (név, cím, telefon).
+- Ügyfélt kiválasztva láthatóak a bankszámlái (számlaszám, létrehozás dátuma, egyenleg). A bankszámla egyenlegét a tranzakciók alapján számoljuk ki. A bankszámla zárolható, ez azt jelenti, hogy nem lehet átutalás forrása, vagy célja, amíg a zárolást fel nem oldják.
+- A bankszámlát kiválasztva látható a tranzakciók listája (dátum, forrás és cél számlaszám, összeg).
+- Lehetőségünk van új tranzakció hozzáadására az összeg, illetve a forrás és cél számlaszámok megadásával (kiválasztásával). A dátum automatikusan íródjon bele. A program kérjen megerősítést a tranzakció végrehajtására, majd ezt követően rögzítse a program a tranzakciót (és módosítsa az egyenlegeket). A tranzakció szolgáltatói díjja a forrás számlából levonásra kerül, amely az utalt összeg 0.05%-a.
+- Ha egy ügyfél több számlával is rendelkezik, a tranzakcióknál több forrás számla és számlánként az utalandó összeg is megadható. Ha egy ilyen több forrás számlát tartalmazó tranzakcióban hiba lép fel (bármely számla zárolt, vagy nem áll rendelkezésre elegendő egyenleg), az összes átutalás lépést vissza kell vonni.
+- A számla egyenlege nem csökkenhet 0 alá, ha ez bekövetkezne a tranzakciót vissza kell utasítani.
+- Tranzakciót kiválasztva lehessen azt sztornózni. Ekkor történik egy ellentétes irányú tranzakció ugyanazzal az összeggel. Tranzakciót sztornózni csak a létrehozást követő 12 órában lehet. 
+Az alkalmazás egy Cache komponenst is tartalmazni fog:
+Készítsünk egy egyszerű kliens Cache komponenst amely ideiglenes tárolóként szolgál az adatbázis és az implementált alkalmazás között, a betöltött adatokat tárolja és egy háttérszálon keresztül megadott időközönként letölti az adatbázisból az utolsó menet óta létrehozott illetve módosított rekordokat.
+- Ezen változásokat jelenítsük meg a megfelelő helyen. (feltételezhetjük, hogy egy adat szerkesztése közben soha nem módosul az adatbázisban).
+- A felhasználói felületen helyezzünk el egy gombot, amely a frissítést azonnal kiváltja. 
+
+## Fogalomtár
+
+- Számla: Banki folyószámla.
+- Ügyfél: Olyan személy, aki legalább egy számlával rendelkezik a banknál.
+- Alkalmazott: Olyan munkavállaló, akit a bank foglalkoztat és joga van hozzáférni a számlakezelő rendszerhez.
+- Egyenleg: A számla egyenlege.
+- Tranzakció: Két számla közti pénzmozgás.
+- Utalás: Egy tranzakció végrehajtása.
+- Forrás számla: A tranzakciót indító számla.
+- Cél számla: A tranzakció cél számlája.
+- Zárolt számla: Olyan számla, ami nem vehet részt tranzakcióban.
+- Tranzakciós díj: Minden sikeres tranzakciónál 0.05%, ami a forrás számlából kerül levonásra az utalt összegen felül.
+- Tranzakció sztornózása: Egy ellentétes irányú utalás ugyanazzal az összeggel.
+- Dialog: Egy felugró ablak, amiben egy üzenet jelenik meg. A felhasználó az üzenet elolvasása után bezárja az ablakot.
+
+## Felhasználói esetek diagram
+
+Az alkalmazást csak alkalmazott tudja használni, az ő lehetséges használati eseteit követi nyomon a következő ábra.
+
+## Használati esetek
+
+Az alkalmazás a bejelentkező ablakkal indul, ahol az alkalmazott beírhatja a felhasználónevét és a jelszavát. Sikertelen azonosítás egy figyelmeztető dialogot von maga után. Sikeres azonosítás után az ablak bezáródik és az ügyfélkereső ablak megynyílik.
+Az ügyfélkereső ablakban a felhasználó rákereshet egy ügyfél nevére, címére vagy mindkettőre. Egy gombra kattintva a program kiértékeli a keresést és a top 3 találatot megjeleníti. Utána a felhasználó újra tud keresni módosított adatokkal, vagy kiválaszthatja valamelyik ügyfelet a listából. AZ utóbbi esetben az ablak bezárul és az ügyfélkezelő ablakra jut a felhasználó.
+Az ügyfélkezelő ablakon megjelennek az ügyfél adatai (név, cím, telefon) és számlái (számlaszám, létrehozás dátuma, egyenleg). Ha egy számla háttere sötét, akkor az azt jelenti, hogy a számla zárolva van. Számlát zárolni/aktiválni egy gombal lehet, ami a számla mellett van. Egy számlára kattintva a program megnyitja a tranzakciós lista ablakot. Egy számlára a számla mellett lévő gombra kattintva lehet utalni, ekkor az tranzakció létrehozása ablak megnyílik. Semelyik esetben se zárja be az alkalmazás a ügyfélkezelő ablakot.
+A tranzakciós listán a felhasználó megnézheti az adott számlához tartozó tranzakciókat. Egy tranzakciót sztornózhat is a tranzakciót melletti gombra kattintva. Sztornózás előtt feljön egy jovóhagyó dialógus. Hiba esetén egy dialógus tájékoztatja a usert a hibáról.
+A tranzakció létrehozás képernyőn a dátum és a célszámla már ki van töltve és nem lehet azokat módosítani. A felhasználó hozzáadhat forrásszámlákat egy gomb segítségével, ami megjelenít két dobozt, az egyikbe egy listából választhat ki egy forrásszámlát, a másikban pedig az arról utalandó összeget tudja beírni. Ha már nincs több számlája az ügyfélnek, akkor a gomb kikapcsolt állapotba kerül (megváltozik a kinézete, nem lehet rá kattintani). Egy gombra kattintva feljön egy jóváhagyó dialógus, ami után az utalást elindíthatja. Hiba esetén egy dialógus tájékoztatja a felhasználót a hibáról.
+ 
+ ## Kiegészítések
+ - 10 perc inaktivitás után a jelszót újra meg kell adni. Ekkor megjelenik egy jelszókérő dialógus és az alaklmazás többi ablaka nem kattintható.
+ - Az alkalmazás figyel arra, hogy egy számla egyenlege se csökkenhessen 0 alá.
+ - Az alkalmazás minden tranzakció után levonja a tranzakciós díjat a forrás számla összegéből.
+ - Tranzakciót sztornózni csak a létrehozást követő 12 órában lehet.
+ - Az ügyfélkereső és -kezelő képernyőn van egy frissítés gomb, ami újratölti az adatokat az adatbázisból.
+ - Az ügyfélkezelőnek van egy menüje, ahol be lehet zárni az adott ügyfélablakot, új úgyfékeresést lehet indítani (a jelenlegi ablakot meghagyva) és be lehet zárni az egész alkalmazást.
+ 
+ ## Hordozhatóság
+ Az alkalmazás minden jre 8-al rendelkező rendszeren elfut. Az alkalmazás erőforrásigénye minimális.
+ 
+ ## Fejlesztési környezet
+ Az alkalmazás java nyelven a swing és awt lib-ek felhasználásával készül. Fejlesztői környezet az IntelliJ IDEA. Verziókezelő rendszernek git-et használ.
+ 

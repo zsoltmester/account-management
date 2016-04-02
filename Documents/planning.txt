@@ -1,4 +1,6 @@
-# Követelményelemzés
+##
+# 1.: Követelményelemzés
+##
 
 ## Célkitűzés
 
@@ -43,17 +45,58 @@ Az ügyfélkezelő ablakon megjelennek az ügyfél adatai (név, cím, telefon) 
 A tranzakciós listán a felhasználó megnézheti az adott számlához tartozó tranzakciókat. Egy tranzakciót sztornózhat is a tranzakciót melletti gombra kattintva. Sztornózás előtt feljön egy jovóhagyó dialógus. Hiba esetén egy dialógus tájékoztatja a usert a hibáról.
 A tranzakció létrehozás képernyőn a dátum és a célszámla már ki van töltve és nem lehet azokat módosítani. A felhasználó hozzáadhat forrásszámlákat egy gomb segítségével, ami megjelenít két dobozt, az egyikbe egy listából választhat ki egy forrásszámlát, a másikban pedig az arról utalandó összeget tudja beírni. Ha már nincs több számlája az ügyfélnek, akkor a gomb kikapcsolt állapotba kerül (megváltozik a kinézete, nem lehet rá kattintani). Egy gombra kattintva feljön egy jóváhagyó dialógus, ami után az utalást elindíthatja. Hiba esetén egy dialógus tájékoztatja a felhasználót a hibáról.
  
- ## Kiegészítések
- - 10 perc inaktivitás után a jelszót újra meg kell adni. Ekkor megjelenik egy jelszókérő dialógus és az alaklmazás többi ablaka nem kattintható.
- - Az alkalmazás figyel arra, hogy egy számla egyenlege se csökkenhessen 0 alá.
- - Az alkalmazás minden tranzakció után levonja a tranzakciós díjat a forrás számla összegéből.
- - Tranzakciót sztornózni csak a létrehozást követő 12 órában lehet.
- - Az ügyfélkereső és -kezelő képernyőn van egy frissítés gomb, ami újratölti az adatokat az adatbázisból.
- - Az ügyfélkezelőnek van egy menüje, ahol be lehet zárni az adott ügyfélablakot, új úgyfékeresést lehet indítani (a jelenlegi ablakot meghagyva) és be lehet zárni az egész alkalmazást.
+## Kiegészítések
+- 10 perc inaktivitás után a jelszót újra meg kell adni. Ekkor megjelenik egy jelszókérő dialógus és az alaklmazás többi ablaka nem kattintható.
+- Az alkalmazás figyel arra, hogy egy számla egyenlege se csökkenhessen 0 alá.
+- Az alkalmazás minden tranzakció után levonja a tranzakciós díjat a forrás számla összegéből.
+- Tranzakciót sztornózni csak a létrehozást követő 12 órában lehet.
+- Az ügyfélkereső és -kezelő képernyőn van egy frissítés gomb, ami újratölti az adatokat az adatbázisból.
+- Az ügyfélkezelőnek van egy menüje, ahol be lehet zárni az adott ügyfélablakot, új úgyfékeresést lehet indítani (a jelenlegi ablakot meghagyva) és be lehet zárni az egész alkalmazást.
  
- ## Hordozhatóság
- Az alkalmazás minden jre 8-al rendelkező rendszeren elfut. Az alkalmazás erőforrásigénye minimális.
+## Hordozhatóság
+Az alkalmazás minden jre 8-al rendelkező rendszeren elfut. Az alkalmazás erőforrásigénye minimális.
  
- ## Fejlesztési környezet
- Az alkalmazás java nyelven a swing és awt lib-ek felhasználásával készül. Fejlesztői környezet az IntelliJ IDEA. Verziókezelő rendszernek git-et használ.
+## Fejlesztési környezet
+Az alkalmazás java nyelven a swing és awt lib-ek felhasználásával készül. Fejlesztői környezet az IntelliJ IDEA. Verziókezelő rendszernek git-et használ.
  
+##
+# 2.: Statikus terv
+##
+
+Az alaklmazás háromrétegű architektúrát valósít meg.
+
+## Model
+Itt mindegyik osztály képes kommunikálni az adatbázissal.
+Session
+	Validálja a bejelekezési adatokat, bejelentkezteti/kijelentkezteti a felhasználót és szól a képernyőknek, ha a session megszakadt inaktivitás miatt. A LoginWindow ezzel kommunikál bejelentkezésnél és minden Window fel van iratkozva a Session eseményeire. Illetve a controllerek neki szólnak, ha történt valami.
+Customer
+	Egy ügyfél adatait, azaz a nevét, a címét, a telefonszámát és a számláit kezeli.
+Account
+	Egy számlát kezel, ami tartalmazza a számlaszámot, a státuszát, az egyenlegét és a hozzá kapcsolódó tranzakciókat. Ezen keresztül lehet egy tranzakciót hozzáadni vagy sztornózni és a számla státuszát módosítani.
+Transaction
+	Egy tranzakciót kezel, azaz a forrásszmálát, a célszámlát és az összeget. 
+
+## View
+Dialog
+	Egy dialógus ablak, amiben csak egy szöveg található és egy jóváhagyó gomb. A gomb is bezárja az ablakot. Bezárás vagy gombra kattintás esetén értesíti a controllert.
+SearchView
+	Egy kereső, ami egy mezőt és egy kereső gombot tartalmaz. Értesíti a controllert a kereső gombra való kattintás esetén.
+AccountView
+	Egy számla lista elem nézete, amin megjelenik a számlaszám, az egyenleg és a jobb oldalon egy gomb. A gombal a számla aktiválható/letiltható. A háttere tükrözi az utóbbi állapotot: ha sötét akkor tiltva van, különben aktív.
+TransactionView
+	Egy tranzakció lista elem nézete, amin megjelenik a forrásszámla, a célszámla, az összeg és jobb oldalt egy gomb. A gomban sztornózni lehet a tranzakciót és a gomb csak akkor jelenik meg, ha annak van értelme.
+
+## Controller
+Itt minden ablak fel van iratkozva a Session eseményeire.
+LoginWindow
+	A bejelentkezési ablak logikája. Ez a Session-el kommunikál és meg tud jeleníteni egy Dialogot.
+CustomerSearchWindow
+	Ügyfél keresésére szolgáló ablak, ami a Customerrel kommunikál.
+CustomerManagerWindow
+	Ügyfél kezelésére szolgáló ablak. Ez megjeleníti az ügyfél adatait (név, cím, telefonszám) és a számláit egy AccountView segítségével. Ez kommunikál a Customer-el (adatok lekérdezése) és az Account-al (számlák lekérdezése, számlát státuszának módosítása).
+TransactionOverviewWindow
+	Tranzakciók áttekintésére szolgáló ablak. A Transaction-el kommunikál (tranzakció adatainak lekérdezése) és egy TransactionView segítségével jeleníti meg az adatokat.
+CreateTransactionWindow
+	Tranzakció létrehozására szolgáló ablak.
+	
+

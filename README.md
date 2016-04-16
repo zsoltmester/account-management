@@ -1,2 +1,2 @@
 # account-management
-A school project.
+This was a school project. 

@@ -1,9 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /**
  * This class manages a session. One instance manage only one session.
@@ -12,7 +9,7 @@ public class Session {
 
     private static final long TIMEOUT = 1000 * 60 * 10; // 10 minutes
 
-    private final Object lock = new Object();
+    private final Object lock;
 
     private String user;
 
@@ -24,6 +21,7 @@ public class Session {
     private TimerTask timerTask;
 
     private Session(String user) {
+        lock = new Object();
         this.user = user;
         listeners = new ArrayList<>();
         isActive = true;
@@ -58,10 +56,10 @@ public class Session {
      * Validates the credentials and creates a session for the user if those are valid.
      *
      * @param user     The user to log in.
-     * @param password The password.
+     * @param password The password in base 64 encoding.
      * @return The created session if the credentials are valid, otherwise <code>null</code>.
      */
-    public static Session login(String user, CharSequence password) {
+    public static Session login(String user, byte[] password) {
         // TODO query from the database
         boolean isValidCredentials = true;
         return isValidCredentials ? new Session(user) : null;
@@ -72,6 +70,9 @@ public class Session {
      */
     public void logout() {
         synchronized (lock) {
+            if (!isActive) {
+                return;
+            }
             isActive = false;
             timerTask.cancel();
             timer.purge();
@@ -82,10 +83,18 @@ public class Session {
     /**
      * Returns the user associated with this session.
      *
-     * @return The user associated with this session. <code>null</code>, if this session is invalid.
+     * @return The user associated with this session.
      */
     public String getUser() {
-        return isActive ? user : null;
+        return user;
+    }
+
+    /**
+     * Returns if the session is active.
+     * @return The session is active or not.
+     */
+    public boolean isActive() {
+        return isActive;
     }
 
     /**
@@ -94,7 +103,9 @@ public class Session {
      * @return The time left for this session. <=0, if this session is invalid.
      */
     public long getTimeLeft() {
-        return isActive ? timerTask.scheduledExecutionTime() - System.currentTimeMillis() : 0;
+        synchronized (lock) {
+            return isActive ? timerTask.scheduledExecutionTime() - System.currentTimeMillis() : 0;
+        }
     }
 
     /**

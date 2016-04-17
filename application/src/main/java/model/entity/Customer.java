@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,6 +7,8 @@ import java.util.List;
  * The customer entity.
  */
 public class Customer {
+
+    private long id;
 
     private String name;
 
@@ -19,16 +21,27 @@ public class Customer {
     /**
      * Creates a new customer based on the given params.
      *
+     * @param id       The ID of the customer.
      * @param name     The name of the customer.
      * @param address  The address of the customer.
      * @param phone    The phone number of the customer.
      * @param accounts The accounts of the customer.
      */
-    public Customer(String name, String address, String phone, List<Account> accounts) {
+    public Customer(String name, String address, String phone, List<Account> accounts, long id) {
         this.name = name;
         this.address = address;
         this.phone = phone;
+        this.id = id;
         this.accounts = accounts == null ? Collections.emptyList() : accounts;
+    }
+
+    /**
+     * Returns the ID of this customer.
+     *
+     * @return The ID of this customer.
+     */
+    public long getId() {
+        return id;
     }
 
     /**

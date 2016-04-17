@@ -1,4 +1,4 @@
-package model;
+package model.entity;
 
 import java.math.BigDecimal;
 
@@ -6,6 +6,8 @@ import java.math.BigDecimal;
  * The transaction entity.
  */
 public class Transaction {
+
+    private long id;
 
     private long sourceAccount;
 
@@ -16,14 +18,25 @@ public class Transaction {
     /**
      * Creates transaction based on the given params.
      *
+     * @param id            The ID of this transaction.
      * @param sourceAccount The source account ID.
      * @param targetAccount The target account ID.
-     * @param amount The amount.
+     * @param amount        The amount.
      */
-    public Transaction(long sourceAccount, long targetAccount, BigDecimal amount) {
+    public Transaction(long id, long sourceAccount, long targetAccount, BigDecimal amount) {
+        this.id = id;
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
         this.amount = amount;
+    }
+
+    /**
+     * Returns the ID of this transaction.
+     *
+     * @return The ID of this transaction.
+     */
+    public long getId() {
+        return id;
     }
 
     /**

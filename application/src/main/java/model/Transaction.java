@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class Transaction {
 
     private long sourceAccount;
+
     private long targetAccount;
 
     private BigDecimal amount;

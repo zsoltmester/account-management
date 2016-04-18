@@ -32,7 +32,7 @@ public class Customer {
         this.address = address;
         this.phone = phone;
         this.id = id;
-        this.accounts = accounts == null ? Collections.emptyList() : accounts;
+        this.accounts = accounts;
     }
 
     /**

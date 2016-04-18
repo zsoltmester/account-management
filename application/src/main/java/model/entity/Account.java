@@ -1,7 +1,6 @@
 package model.entity;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +28,7 @@ public class Account {
         this.id = id;
         this.balance = balance;
         this.isActive = isActive;
-        this.transactions = transactions == null ? Collections.emptyList() : transactions;
+        this.transactions = transactions;
     }
 
     /**
@@ -62,7 +61,7 @@ public class Account {
     /**
      * Returns the transactions related to this account.
      *
-     * @return The transactions related to this account. It never null.
+     * @return The transactions related to this account.
      */
     public List<Transaction> getTransactions() {
         return transactions;

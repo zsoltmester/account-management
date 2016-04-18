@@ -21,6 +21,7 @@ public class Session {
 
     private Timer timer;
     private TimerTask timerTask;
+    private long nextRun;
 
     private Session(String user) {
         lock = new Object();
@@ -50,7 +51,8 @@ public class Session {
                     listeners.forEach(SessionListener::onEnd);
                 }
             };
-            timer.scheduleAtFixedRate(timerTask, TIMEOUT, TIMEOUT);
+            nextRun = System.currentTimeMillis() + TIMEOUT;
+            timer.schedule(timerTask, TIMEOUT);
         }
     }
 
@@ -104,7 +106,7 @@ public class Session {
      */
     public long getTimeLeft() {
         synchronized (lock) {
-            return isActive ? timerTask.scheduledExecutionTime() - System.currentTimeMillis() : 0;
+            return isActive ? nextRun - System.currentTimeMillis() : 0;
         }
     }
 

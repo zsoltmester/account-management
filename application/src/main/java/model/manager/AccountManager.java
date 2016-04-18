@@ -1,12 +1,12 @@
-package model;
+package model.manager;
 
 /**
  * Contains account related actions.
  */
-public class AccountManager {
+public class AccountManager extends DatabaseManager {
 
     private AccountManager() {
-        throw new UnsupportedOperationException("You cannot instantiate a manager class.");
+        super();
     }
 
     /**

@@ -1,4 +1,4 @@
-package model;
+package model.manager;
 
 import model.entity.Transaction;
 
@@ -7,7 +7,11 @@ import java.util.List;
 /**
  * Contains transaction related actions.
  */
-public class TransactionManager {
+public class TransactionManager extends DatabaseManager {
+
+    private TransactionManager() {
+        super();
+    }
 
     /**
      * Check if the given transaction can be performed.

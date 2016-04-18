@@ -1,5 +1,7 @@
 package model;
 
+import model.manager.UserManager;
+
 import java.util.*;
 
 /**
@@ -60,9 +62,7 @@ public class Session {
      * @return The created session if the credentials are valid, otherwise <code>null</code>.
      */
     public static Session login(String user, byte[] password) {
-        // TODO query from the database
-        boolean isValidCredentials = true;
-        return isValidCredentials ? new Session(user) : null;
+        return UserManager.isValid(user, password) ? new Session(user) : null;
     }
 
     /**

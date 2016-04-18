@@ -1,5 +1,7 @@
 package model.manager;
 
+import java.util.Base64;
+
 /**
  * Contains user related actions.
  */
@@ -18,6 +20,7 @@ public class UserManager extends DatabaseManager {
      */
     public static boolean isValid(String user, byte[] password) {
         // TODO use the database for this.
-        return true;
+        // TODO just a temp logic until we have database
+        return user.equals("admin") && "admin".equals(new String(Base64.getDecoder().decode(password)));
     }
 }

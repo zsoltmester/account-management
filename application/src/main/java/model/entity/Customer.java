@@ -1,6 +1,5 @@
 package model.entity;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,11 +26,11 @@ public class Customer {
      * @param phone    The phone number of the customer.
      * @param accounts The accounts of the customer.
      */
-    public Customer(String name, String address, String phone, List<Account> accounts, long id) {
+    public Customer(long id, String name, String address, String phone, List<Account> accounts) {
+        this.id = id;
         this.name = name;
         this.address = address;
         this.phone = phone;
-        this.id = id;
         this.accounts = accounts;
     }
 

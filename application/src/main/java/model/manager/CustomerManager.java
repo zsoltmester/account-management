@@ -2,8 +2,7 @@ package model.manager;
 
 import model.entity.Customer;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Contains customer related actions.
@@ -11,14 +10,23 @@ import java.util.List;
 public class CustomerManager {
 
     /**
-     * Returns all the customers from the database.
+     * Returns all the customer names associated with the customer IDs from the database.
      *
-     * @return All the customers from the database.
+     * @return All the customer names associated with the customer IDs from the database.
      */
-    public static List<Customer> getCustomers() {
+    public static Map<String, Long> getStrippedCustomers() {
         // TODO use the database for this.
-        // TODO just a temp logic until we have database
+        return null;
+    }
 
-        return Collections.emptyList();
+    /**
+     * Returns the customer associated with the given id.
+     *
+     * @param id The id of the customer to query.
+     * @return The customer associated with the given id. <code>null</code>, if no customer were found.
+     */
+    public static Customer getCustomer(long id) {
+        // TODO use the database for this.
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package model.manager;
 
+import java.util.Random;
+
 /**
  * Contains account related actions.
  */
@@ -16,8 +18,7 @@ public class AccountManager extends DatabaseManager {
      * @return <code>true</code>, if the action performed, otherwise <code>false</code>.
      */
     public static boolean activateAccount(long id) {
-        // TODO use the database for this
-        return true;
+        return changeStatus(true, id);
     }
 
     /**
@@ -27,7 +28,11 @@ public class AccountManager extends DatabaseManager {
      * @return <code>true</code>, if the action performed, otherwise <code>false</code>.
      */
     public static boolean deactivateAccount(long id) {
-        // TODO use the database for this
-        return true;
+        return changeStatus(false, id);
+    }
+
+    private static boolean changeStatus(boolean activate, long id) {
+        // TODO logic requires database
+        return new Random().nextInt() % 2 == 0;
     }
 }

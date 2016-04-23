@@ -3,6 +3,7 @@ package model.manager;
 import model.entity.Transaction;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Contains transaction related actions.
@@ -20,8 +21,8 @@ public class TransactionManager extends DatabaseManager {
      * @return <code>true</code>, if the transaction can performed, otherwise <code>false</code>.
      */
     public static boolean canPerform(Transaction transaction) {
-        // TODO use the database for this
-        return true;
+        // TODO logic requires database
+        return new Random().nextInt() % 2 == 0;
     }
 
     /**
@@ -31,8 +32,8 @@ public class TransactionManager extends DatabaseManager {
      * @return <code>true</code>, if the transactions can performed at once, otherwise <code>false</code>.
      */
     public static boolean canPerform(List<Transaction> transactions) {
-        // TODO use the database for this
-        return true;
+        // TODO logic requires database
+        return new Random().nextInt() % 2 == 0;
     }
 
     /**
@@ -42,8 +43,8 @@ public class TransactionManager extends DatabaseManager {
      * @return <code>true</code>, if the transaction performed, otherwise <code>false</code>.
      */
     public static boolean performTransaction(Transaction transaction) {
-        // TODO use the database for this
-        return true;
+        // TODO logic requires database
+        return new Random().nextInt() % 2 == 0;
     }
 
     /**
@@ -53,7 +54,7 @@ public class TransactionManager extends DatabaseManager {
      * @return <code>true</code>, if the transaction performed at once, otherwise <code>false</code>.
      */
     public static boolean performTransaction(List<Transaction> transactions) {
-        // TODO use the database for this
-        return true;
+        // TODO logic requires database
+        return new Random().nextInt() % 2 == 0;
     }
 }

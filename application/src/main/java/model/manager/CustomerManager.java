@@ -4,6 +4,7 @@ import model.entity.Customer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static model.manager.DatabaseManager.customers;
 
@@ -34,6 +35,10 @@ public class CustomerManager {
      */
     public static Customer getCustomer(long id) {
         // TODO just a temp logic until we have database
-        return customers.stream().filter(customer -> customer.getId() == id).findAny().get();
+        try {
+            return customers.stream().filter(customer -> customer.getId() == id).findAny().get();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 }

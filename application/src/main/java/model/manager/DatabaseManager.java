@@ -31,7 +31,7 @@ abstract class DatabaseManager {
         // create the accounts
         List<Account> accounts = new ArrayList<>(NUM_OF_ACCOUNTS);
         for (int i = 0; i < NUM_OF_ACCOUNTS; i++) {
-            accounts.add(new Account(i + 1, new BigDecimal((i + 1) * 100), i % (NUM_OF_ACCOUNTS / 2) == 0,
+            accounts.add(new Account(i, new BigDecimal((i + 1) * 100), i % (NUM_OF_ACCOUNTS / 2) != 0,
                     new ArrayList<Transaction>()));
         }
 
@@ -46,8 +46,8 @@ abstract class DatabaseManager {
 
         // create the customers
         customers = new HashSet<>();
-        customers.add(new Customer(1, "1-name", "1-address", "1-phone", accounts.subList(0, 3)));
-        customers.add(new Customer(2, "2-name", "2-address", "2-phone", accounts.subList(4, 6)));
-        customers.add(new Customer(3, "3-name", "3-address", "3-phone", accounts.subList(6, 9)));
+        customers.add(new Customer(0, "1-name", "1-address", "1-phone", accounts.subList(0, 3)));
+        customers.add(new Customer(1, "2-name", "2-address", "2-phone", accounts.subList(4, 6)));
+        customers.add(new Customer(2, "3-name", "3-address", "3-phone", accounts.subList(6, 9)));
     }
 }

@@ -2,7 +2,10 @@ package model.manager;
 
 import model.entity.Customer;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import static model.manager.DatabaseManager.customers;
 
 /**
  * Contains customer related actions.
@@ -15,8 +18,12 @@ public class CustomerManager {
      * @return All the customer names associated with the customer IDs from the database.
      */
     public static Map<String, Long> getStrippedCustomers() {
-        // TODO use the database for this.
-        return null;
+        // TODO just a temp logic until we have database
+        Map<String, Long> strippedCustomers = new HashMap<>();
+        customers.forEach(customer -> {
+            strippedCustomers.put(customer.getName(), customer.getId());
+        });
+        return strippedCustomers;
     }
 
     /**
@@ -26,7 +33,7 @@ public class CustomerManager {
      * @return The customer associated with the given id. <code>null</code>, if no customer were found.
      */
     public static Customer getCustomer(long id) {
-        // TODO use the database for this.
-        return null;
+        // TODO just a temp logic until we have database
+        return customers.stream().filter(customer -> customer.getId() == id).findAny().get();
     }
 }

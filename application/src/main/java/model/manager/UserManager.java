@@ -19,7 +19,6 @@ public class UserManager extends DatabaseManager {
      * @return <code>true</code> if the credentials are valid, otherwise <code>false</code>.
      */
     public static boolean isValid(String user, byte[] password) {
-        // TODO use the database for this.
         // TODO just a temp logic until we have database
         return "admin".equals(user) && "admin".equals(new String(Base64.getDecoder().decode(password)));
     }

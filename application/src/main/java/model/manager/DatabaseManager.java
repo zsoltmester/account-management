@@ -15,7 +15,7 @@ import java.util.Set;
  */
 abstract class DatabaseManager {
 
-    DatabaseManager() {
+    protected DatabaseManager() {
         throw new UnsupportedOperationException("You cannot instantiate a manager class.");
     }
 
@@ -23,9 +23,9 @@ abstract class DatabaseManager {
     // TODO Dummy datas to simulate the database
     //
 
-    static final int NUM_OF_ACCOUNTS = 9;
+    protected static final int NUM_OF_ACCOUNTS = 9;
 
-    static Set<Customer> customers;
+    protected static Set<Customer> customers;
 
     static {
         // create the accounts

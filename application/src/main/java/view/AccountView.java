@@ -24,7 +24,10 @@ public class AccountView extends JPanel {
     private JButton transactionHistoryButton;
 
     /**
-     * Creates a new account view.
+     * Creates a new account view based on the given account.
+     *
+     * @param account  The account to display.
+     * @param listener The listener which handles the click events.
      */
     public AccountView(Account account, OnAccountClickListener listener) {
         this.account = account;
@@ -36,7 +39,7 @@ public class AccountView extends JPanel {
         processField(idField);
         balanceField = new JTextField(account.getBalance().toString());
         processField(balanceField);
-        creationField = new JTextField(Configs.CREATION_DATE_FORMAT.format(account.getCreationDate()));
+        creationField = new JTextField(Configs.ACCOUNT_CREATION_DATE_FORMAT.format(account.getCreationDate()));
         processField(creationField);
         changeStatusButton = new JButton(account.isActive() ? Strings.ACCOUNT_DEACTIVATE : Strings.ACCOUNT_ACTIVATE);
         changeStatusButton.addActionListener(event -> {
@@ -51,6 +54,7 @@ public class AccountView extends JPanel {
         add(Box.createVerticalStrut(Dimensions.GAP.height));
     }
 
+    // TODO code duplication with the TransactionView#processField(...)
     private void processField(JTextField field) {
         field.setEnabled(false);
         field.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,6 +65,7 @@ public class AccountView extends JPanel {
         add(field);
     }
 
+    // TODO code duplication with the TransactionView#processButton(...)
     private void processButton(JButton button) {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setMaximumSize(Dimensions.ACCOUNT_COMPONENT_SIZE);

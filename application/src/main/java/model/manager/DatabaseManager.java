@@ -38,7 +38,7 @@ abstract class DatabaseManager {
         for (int i = 0; i < NUM_OF_ACCOUNTS; i++) {
             for (int j = 0; j < i; j++) {
                 Transaction transaction = new Transaction(i * NUM_OF_ACCOUNTS + j, Integer.toString(i),
-                        Integer.toString(j), new BigDecimal(i * j));
+                        Integer.toString(j), new BigDecimal(i * j), new Date());
                 accounts.get(i).getTransactions().add(transaction);
                 accounts.get(j).getTransactions().add(transaction);
             }

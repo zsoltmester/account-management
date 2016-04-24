@@ -1,6 +1,7 @@
 package model.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * The transaction entity.
@@ -15,6 +16,8 @@ public class Transaction {
 
     private BigDecimal amount;
 
+    private Date creationDate;
+
     /**
      * Creates transaction based on the given params.
      *
@@ -22,12 +25,14 @@ public class Transaction {
      * @param sourceAccount The source account ID.
      * @param targetAccount The target account ID.
      * @param amount        The amount.
+     * @param creationDate  The creation date.
      */
-    public Transaction(long id, String sourceAccount, String targetAccount, BigDecimal amount) {
+    public Transaction(long id, String sourceAccount, String targetAccount, BigDecimal amount, Date creationDate) {
         this.id = id;
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
         this.amount = amount;
+        this.creationDate = creationDate;
     }
 
     /**
@@ -64,5 +69,14 @@ public class Transaction {
      */
     public BigDecimal getAmount() {
         return amount;
+    }
+
+    /**
+     * Returns the creation date.
+     *
+     * @return The creation date.
+     */
+    public Date getCreationDate() {
+        return creationDate;
     }
 }

@@ -36,4 +36,7 @@ public class Strings {
     public static final String ACCOUNT_ACTIVATE = "Activate";
     public static final String ACCOUNT_DEACTIVATE = "Deactivate";
     public static final String ACCOUNT_TRANSACTION_HISTORY_BUTTON = "Transaction History";
+
+    public static final String TRANSACTION_HISTORY_WINDOW_TITLE = "Transaction History";
+    public static final String TRANSACTION_HISTORY_CANCEL_BUTTON_TITLE = "Cancel";
 }

@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+// TODO Solve the window closing bug.
+// TODO Solve the too many icons bug.
+
 /**
  * The base class for the windows, which manage the main {@link JFrame} and the {@link #session}.
  */

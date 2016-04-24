@@ -29,7 +29,10 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
     private List<AccountView> accountViews;
 
     /**
-     * Creates teh customer manager window.
+     * Creates the customer manager window.
+     *
+     * @param session  The current session.
+     * @param customer The customer to display.
      */
     public CustomerManagerWindow(Session session, Customer customer) {
         super(Strings.CUSTOMER_MANAGER_WINDOW_TITLE, session);
@@ -57,6 +60,7 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
         accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
         accountViews = new ArrayList<>(customer.getAccounts().size());
         customer.getAccounts().forEach(account -> {
+            // TODO add an info account panel
             AccountView accountView = new AccountView(account, CustomerManagerWindow.this);
             accountViews.add(accountView);
             accountPanel.add(accountView);
@@ -82,6 +86,6 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
 
     @Override
     public void onTransactionHistoryClicked(Account account) {
-        // TODO Navigate to the transaction history screen.
+        new TransactionOverviewWindow(session, account.getTransactions());
     }
 }

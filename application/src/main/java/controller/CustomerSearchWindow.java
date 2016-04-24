@@ -29,6 +29,8 @@ public class CustomerSearchWindow extends Window {
 
     /**
      * Displays the customer search window.
+     *
+     * @param session The current session.
      */
     public CustomerSearchWindow(Session session) {
         super(Strings.CUSTOMER_SEARCH_WINDOW_TITLE, session);

@@ -28,6 +28,9 @@ public class Dimensions {
     public static final Insets CUSTOMER_MANAGER_INFO_COMPONENT_BORDER =
             new Insets(GAP.height, GAP.width, GAP.height, GAP.width);
 
-    public static final Dimension ACCOUNT_COMPONENT_SIZE =
-            new Dimension(WINDOW_WIDTH / 2, COMPONENT_HEIGHT);
+    public static final Dimension ACCOUNT_COMPONENT_SIZE = new Dimension(WINDOW_WIDTH / 2, COMPONENT_HEIGHT);
+
+    public static final Dimension TRANSACTION_COMPONENT_SIZE = ACCOUNT_COMPONENT_SIZE;
+
+    public static final Dimension TRANSACTION_HISTORY_WINDOW_SIZE = new Dimension(WINDOW_WIDTH / 2, WINDOW_WIDTH * 2);
 }

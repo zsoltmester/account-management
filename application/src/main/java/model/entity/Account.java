@@ -1,6 +1,7 @@
 package model.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,6 +13,8 @@ public class Account {
 
     private BigDecimal balance;
 
+    private Date creationDate;
+
     private boolean isActive;
 
     private List<Transaction> transactions;
@@ -21,12 +24,14 @@ public class Account {
      *
      * @param id           The ID of the account.
      * @param balance      The account balance.
+     * @param creationDate The account creation date.
      * @param isActive     The account is active or not.
      * @param transactions The account related transactions.
      */
-    public Account(String id, BigDecimal balance, boolean isActive, List<Transaction> transactions) {
+    public Account(String id, BigDecimal balance, Date creationDate, boolean isActive, List<Transaction> transactions) {
         this.id = id;
         this.balance = balance;
+        this.creationDate = creationDate;
         this.isActive = isActive;
         this.transactions = transactions;
     }
@@ -47,6 +52,15 @@ public class Account {
      */
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    /**
+     * Returns the creation date of this account.
+     *
+     * @return The creation date of this account.
+     */
+    public Date getCreationDate() {
+        return creationDate;
     }
 
     /**

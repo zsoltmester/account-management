@@ -5,10 +5,7 @@ import model.entity.Customer;
 import model.entity.Transaction;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 // TODO Wait the database integration with this.
 
@@ -33,8 +30,8 @@ abstract class DatabaseManager {
         // create the accounts
         List<Account> accounts = new ArrayList<>(NUM_OF_ACCOUNTS);
         for (int i = 0; i < NUM_OF_ACCOUNTS; i++) {
-            accounts.add(new Account(Integer.toString(i), new BigDecimal((i + 1) * 100), i % (NUM_OF_ACCOUNTS / 2) != 0,
-                    new ArrayList<Transaction>()));
+            accounts.add(new Account(Integer.toString(i), new BigDecimal((i + 1) * 100), new Date(),
+                    i % (NUM_OF_ACCOUNTS / 2) != 0, new ArrayList<Transaction>()));
         }
 
         // create the transactions
@@ -50,7 +47,7 @@ abstract class DatabaseManager {
         // create the customers
         customers = new HashSet<>();
         customers.add(new Customer(0, "Andrew", "1-address", "1-phone", accounts.subList(0, 3)));
-        customers.add(new Customer(1, "Ben", "2-address", "2-phone", accounts.subList(4, 6)));
+        customers.add(new Customer(1, "Ben", "2-address", "2-phone", accounts.subList(3, 6)));
         customers.add(new Customer(2, "Daniel", "3-address", "3-phone", accounts.subList(6, 9)));
     }
 }

@@ -6,6 +6,8 @@ package resource;
 public class Strings {
 
     public static final String OK = "OK";
+    public static final String UNAVAILABLE_DIALOG_TITLE = "Unavailable Function";
+    public static final String UNAVAILABLE_DIALOG_MESSAGE = "It will be implemented after the database integration.";
 
     public static final String TITLE_PREFIX = "Account Management - ";
     public static final String SESSION_END_TITLE = "Logout";
@@ -30,4 +32,8 @@ public class Strings {
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_NAME = "Name\n%s";
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_ADDRESS = "Address\n%s";
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_PHONE = "Phone\n%s";
+
+    public static final String ACCOUNT_ACTIVATE = "Activate";
+    public static final String ACCOUNT_DEACTIVATE = "Deactivate";
+    public static final String ACCOUNT_TRANSACTION_HISTORY_BUTTON = "Transaction History";
 }

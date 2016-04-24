@@ -9,9 +9,9 @@ public class Transaction {
 
     private long id;
 
-    private long sourceAccount;
+    private String sourceAccount;
 
-    private long targetAccount;
+    private String targetAccount;
 
     private BigDecimal amount;
 
@@ -23,7 +23,7 @@ public class Transaction {
      * @param targetAccount The target account ID.
      * @param amount        The amount.
      */
-    public Transaction(long id, long sourceAccount, long targetAccount, BigDecimal amount) {
+    public Transaction(long id, String sourceAccount, String targetAccount, BigDecimal amount) {
         this.id = id;
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
@@ -44,7 +44,7 @@ public class Transaction {
      *
      * @return The source account ID.
      */
-    public long getSourceAccount() {
+    public String getSourceAccount() {
         return sourceAccount;
     }
 
@@ -53,7 +53,7 @@ public class Transaction {
      *
      * @return The target account ID.
      */
-    public long getTargetAccount() {
+    public String getTargetAccount() {
         return targetAccount;
     }
 

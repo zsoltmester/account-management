@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Account {
 
-    private long id;
+    private String id;
 
     private BigDecimal balance;
 
@@ -24,7 +24,7 @@ public class Account {
      * @param isActive     The account is active or not.
      * @param transactions The account related transactions.
      */
-    public Account(long id, BigDecimal balance, boolean isActive, List<Transaction> transactions) {
+    public Account(String id, BigDecimal balance, boolean isActive, List<Transaction> transactions) {
         this.id = id;
         this.balance = balance;
         this.isActive = isActive;
@@ -36,7 +36,7 @@ public class Account {
      *
      * @return The ID of this account.
      */
-    public long getId() {
+    public String getId() {
         return id;
     }
 

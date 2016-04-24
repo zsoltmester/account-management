@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 // TODO Wait the database integration with this.
+
 /**
  * Contains Database related actions for other managers.
  */
@@ -32,14 +33,15 @@ abstract class DatabaseManager {
         // create the accounts
         List<Account> accounts = new ArrayList<>(NUM_OF_ACCOUNTS);
         for (int i = 0; i < NUM_OF_ACCOUNTS; i++) {
-            accounts.add(new Account(i, new BigDecimal((i + 1) * 100), i % (NUM_OF_ACCOUNTS / 2) != 0,
+            accounts.add(new Account(Integer.toString(i), new BigDecimal((i + 1) * 100), i % (NUM_OF_ACCOUNTS / 2) != 0,
                     new ArrayList<Transaction>()));
         }
 
         // create the transactions
         for (int i = 0; i < NUM_OF_ACCOUNTS; i++) {
             for (int j = 0; j < i; j++) {
-                Transaction transaction = new Transaction(i * NUM_OF_ACCOUNTS + j, i, j, new BigDecimal(i * j));
+                Transaction transaction = new Transaction(i * NUM_OF_ACCOUNTS + j, Integer.toString(i),
+                        Integer.toString(j), new BigDecimal(i * j));
                 accounts.get(i).getTransactions().add(transaction);
                 accounts.get(j).getTransactions().add(transaction);
             }

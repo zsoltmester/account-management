@@ -32,6 +32,7 @@ public class Strings {
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_NAME = "Name\n%s";
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_ADDRESS = "Address\n%s";
     public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_PHONE = "Phone\n%s";
+    public static final String CUSTOMER_MANAGER_CREATE_TRANSACTION_BUTTON_TITLE = "Send Money";
 
     public static final String ACCOUNT_ACTIVATE = "Activate";
     public static final String ACCOUNT_DEACTIVATE = "Deactivate";
@@ -39,4 +40,10 @@ public class Strings {
 
     public static final String TRANSACTION_HISTORY_WINDOW_TITLE = "Transaction History";
     public static final String TRANSACTION_HISTORY_CANCEL_BUTTON_TITLE = "Cancel";
+
+    public static final String CREATE_TRANSACTION_WINDOW_TITLE = "Send Money";
+    public static final String CREATE_TRANSACTION_WINDOW_SOURCE_ACCOUNTS = "Source Accounts:";
+    public static final String CREATE_TRANSACTION_WINDOW_TARGET_ACCOUNT_DEFAULT = "Target Account";
+    public static final String CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT = "Balance";
+    public static final String CREATE_TRANSACTION_WINDOW_SEND_BUTTON_TITLE = "Send";
 }

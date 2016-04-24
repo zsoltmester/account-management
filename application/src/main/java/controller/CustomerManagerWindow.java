@@ -9,6 +9,7 @@ import view.AccountView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
     private JTextArea customerNameArea;
     private JTextArea customerAddressArea;
     private JTextArea customerPhoneArea;
+    private JButton createTransactionButton;
 
     private JPanel accountPanel;
     private List<AccountView> accountViews;
@@ -54,13 +56,21 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
         customerPhoneArea = new JTextArea(
                 String.format(Strings.CUSTOMER_MANAGER_WINDOW_CUSTOMER_PHONE, customer.getPhone()));
         processInfoComponent(customerPhoneArea);
+        createTransactionButton = new JButton(Strings.CUSTOMER_MANAGER_CREATE_TRANSACTION_BUTTON_TITLE);
+        createTransactionButton.setMaximumSize(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_SIZE);
+        createTransactionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        createTransactionButton.addActionListener(event -> {
+            new CreateTransactionWindow(session, customer);
+        });
+        infoPanel.add(createTransactionButton);
         container.add(infoPanel);
+
+        // TODO add an info account panel
 
         accountPanel = new JPanel();
         accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
         accountViews = new ArrayList<>(customer.getAccounts().size());
         customer.getAccounts().forEach(account -> {
-            // TODO add an info account panel
             AccountView accountView = new AccountView(account, CustomerManagerWindow.this);
             accountViews.add(accountView);
             accountPanel.add(accountView);
@@ -73,6 +83,7 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
     private void processInfoComponent(JTextArea textArea) {
         textArea.setEnabled(false);
         textArea.setMaximumSize(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_SIZE);
+        textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
         textArea.setBorder(new EmptyBorder(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_BORDER));
         infoPanel.add(textArea);
     }

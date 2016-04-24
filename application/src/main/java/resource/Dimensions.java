@@ -33,4 +33,11 @@ public class Dimensions {
     public static final Dimension TRANSACTION_COMPONENT_SIZE = ACCOUNT_COMPONENT_SIZE;
 
     public static final Dimension TRANSACTION_HISTORY_WINDOW_SIZE = new Dimension(WINDOW_WIDTH / 2, WINDOW_WIDTH * 2);
+
+    public static final Dimension CREATE_TRANSACTION_WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_WIDTH);
+    public static final Dimension CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE =
+            new Dimension(WINDOW_WIDTH / 2, COMPONENT_HEIGHT);
+    public static final Dimension CREATE_TRANSACTION_WINDOW_COMPONENT_SMALLER_SIZE =
+            new Dimension(CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE.width,
+                    CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE.height / 3);
 }

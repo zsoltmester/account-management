@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+// TODO Wait the database integration with this.
 /**
  * Contains Database related actions for other managers.
  */
@@ -46,8 +47,8 @@ abstract class DatabaseManager {
 
         // create the customers
         customers = new HashSet<>();
-        customers.add(new Customer(0, "1-name", "1-address", "1-phone", accounts.subList(0, 3)));
-        customers.add(new Customer(1, "2-name", "2-address", "2-phone", accounts.subList(4, 6)));
-        customers.add(new Customer(2, "3-name", "3-address", "3-phone", accounts.subList(6, 9)));
+        customers.add(new Customer(0, "Andrew", "1-address", "1-phone", accounts.subList(0, 3)));
+        customers.add(new Customer(1, "Ben", "2-address", "2-phone", accounts.subList(4, 6)));
+        customers.add(new Customer(2, "Daniel", "3-address", "3-phone", accounts.subList(6, 9)));
     }
 }

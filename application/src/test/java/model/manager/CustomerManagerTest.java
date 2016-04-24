@@ -14,10 +14,10 @@ public class CustomerManagerTest {
 
     @Test
     public void integrity() {
-        Map<String, Long> strippedCustomers = CustomerManager.getStrippedCustomers();
+        Map<Long, String> strippedCustomers = CustomerManager.getStrippedCustomers();
         assertNotNull(strippedCustomers);
         assertTrue(strippedCustomers.size() > 0);
-        strippedCustomers.forEach((name, id) -> {
+        strippedCustomers.forEach((id, name) -> {
             assertNotNull(name);
             assertTrue(id >= 0);
             Customer customer = CustomerManager.getCustomer(id);

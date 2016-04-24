@@ -5,7 +5,6 @@ import resource.Dimensions;
 import resource.Strings;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Base64;
@@ -24,21 +23,18 @@ public class LoginWindow extends Window {
      */
     public LoginWindow() {
         super(Strings.LOGIN_WINDOW_TITLE, null);
+
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+
         userField = new JTextField(Strings.LOGIN_WINDOW_USER_FIELD_DEFAULT);
-        addComponent(userField);
+        addComponentToBoxLayout(userField, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
         passwordField = new JTextField(Strings.LOGIN_WINDOW_PASSWORD_FIELD_DEFAULT);
-        addComponent(passwordField);
+        addComponentToBoxLayout(passwordField, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
         loginButton = new JButton(Strings.LOGIN_WINDOW_LOGIN_BUTTON_TITLE);
         loginButton.addActionListener(new OnLoginButtonClickListener());
-        addComponent(loginButton);
-        display(Dimensions.LOGIN_WINDOW_SIZE.width, Dimensions.LOGIN_WINDOW_SIZE.height);
-    }
+        addComponentToBoxLayout(loginButton, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
 
-    private void addComponent(JComponent component) {
-        component.setMaximumSize(Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
-        component.setAlignmentX(Component.CENTER_ALIGNMENT);
-        container.add(component);
+        display(Dimensions.LOGIN_WINDOW_SIZE.width, Dimensions.LOGIN_WINDOW_SIZE.height);
     }
 
     private class OnLoginButtonClickListener implements ActionListener {
@@ -52,7 +48,8 @@ public class LoginWindow extends Window {
                 JOptionPane.showMessageDialog(container, Strings.LOGIN_WINDOW_INVALID_CREDENTIALS,
                         Strings.LOGIN_WINDOW_TITLE, JOptionPane.ERROR_MESSAGE);
             } else {
-                // TODO navigate with the created session
+                close();
+                new CustomerSearchWindow(session);
             }
         }
     }

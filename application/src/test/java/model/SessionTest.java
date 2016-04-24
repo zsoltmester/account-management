@@ -35,7 +35,7 @@ public class SessionTest {
 
     @Test
     public void revoke() throws InterruptedException {
-        Thread.sleep(1);
+        Thread.sleep(10);
         long timeLeft = session.getTimeLeft();
         session.revoke();
         assertTrue(session.getTimeLeft() - timeLeft > 0);

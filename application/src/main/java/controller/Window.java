@@ -36,12 +36,26 @@ abstract class Window implements WindowListener, Session.SessionListener {
     protected Window(String title, Session session) {
         this.session = session;
         if (session != null) {
+            session.revoke();
             session.addListener(this);
         }
+
         frame = new JFrame(Strings.TITLE_PREFIX + title);
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(Dimensions.WINDOW_MINIMUM_SIZE);
+    }
+
+    /**
+     * Adds the given component properly, if the current layout of the {@link #container} is {@link BoxLayout}.
+     *
+     * @param component The component to add.
+     * @param size      The size of the component.
+     */
+    protected void addComponentToBoxLayout(JComponent component, Dimension size) {
+        component.setMaximumSize(size);
+        component.setAlignmentX(Component.CENTER_ALIGNMENT);
+        container.add(component);
     }
 
     /**
@@ -53,6 +67,22 @@ abstract class Window implements WindowListener, Session.SessionListener {
     protected void display(int width, int height) {
         frame.setSize(width, height);
         frame.setVisible(true);
+    }
+
+    /**
+     * Repaints the window.
+     */
+    protected void repaint() {
+        container.validate();
+        container.repaint();
+    }
+
+    /**
+     * Closes the window.
+     */
+    protected void close() {
+        frame.setVisible(false);
+        frame.dispose();
     }
 
     @Override
@@ -92,6 +122,8 @@ abstract class Window implements WindowListener, Session.SessionListener {
 
     @Override
     public void onEnd() {
-        // TODO
+        JOptionPane.showMessageDialog(container, Strings.SESSION_END_TITLE, Strings.SESSION_END_MESSAGE,
+                JOptionPane.ERROR_MESSAGE);
+        close();
     }
 }

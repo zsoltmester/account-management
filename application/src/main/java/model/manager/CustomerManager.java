@@ -18,11 +18,11 @@ public class CustomerManager {
      *
      * @return All the customer names associated with the customer IDs from the database.
      */
-    public static Map<String, Long> getStrippedCustomers() {
+    public static Map<Long, String> getStrippedCustomers() {
         // TODO just a temp logic until we have database
-        Map<String, Long> strippedCustomers = new HashMap<>();
+        Map<Long, String> strippedCustomers = new HashMap<>();
         customers.forEach(customer -> {
-            strippedCustomers.put(customer.getName(), customer.getId());
+            strippedCustomers.put(customer.getId(), customer.getName());
         });
         return strippedCustomers;
     }

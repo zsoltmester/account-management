@@ -2,6 +2,7 @@ package model.manager;
 
 import java.util.Random;
 
+// TODO add unit test after database integration
 /**
  * Contains account related actions.
  */

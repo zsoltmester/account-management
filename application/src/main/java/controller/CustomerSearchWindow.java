@@ -19,6 +19,8 @@ import java.util.Set;
  */
 public class CustomerSearchWindow extends Window {
 
+    private static final String OPTION_PROPERTY_KEY = CustomerSearchWindow.class.getName() + ":OPTION_PROPERTY_KEY";
+
     private JTextField searchField;
     private JButton searchButton;
     private ButtonGroup chooser;
@@ -73,6 +75,7 @@ public class CustomerSearchWindow extends Window {
             for (Long foundedId : founded) {
                 JRadioButton option = new JRadioButton(String.format(Strings.CUSTOMER_SEARCH_RESULT_LINE,
                         strippedCustomers.get(foundedId), foundedId));
+                option.putClientProperty(OPTION_PROPERTY_KEY, foundedId);
                 options.add(option);
                 chooser.add(option);
                 addComponentToBoxLayout(option, Dimensions.CUSTOMER_SEARCH_WINDOW_OPTION_SIZE);
@@ -100,7 +103,9 @@ public class CustomerSearchWindow extends Window {
                 return;
             }
 
-            // TODO navigate to the customer manager window
+            close();
+            new CustomerManagerWindow(session,
+                    CustomerManager.getCustomer((Long) selected.getClientProperty(OPTION_PROPERTY_KEY)));
         }
     }
 }

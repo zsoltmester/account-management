@@ -81,6 +81,9 @@ abstract class Window implements WindowListener, Session.SessionListener {
      * Closes the window.
      */
     protected void close() {
+        if (session != null) {
+            session.removeListener(this);
+        }
         frame.setVisible(false);
         frame.dispose();
     }
@@ -92,7 +95,9 @@ abstract class Window implements WindowListener, Session.SessionListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        session.removeListener(this);
+        if (session != null) {
+            session.removeListener(this);
+        }
     }
 
     @Override

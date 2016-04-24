@@ -24,4 +24,10 @@ public class Strings {
     public static final String CUSTOMER_SEARCH_NOT_FOUND_MESSAGE = "No customer found.";
     public static final String CUSTOMER_SEARCH_RESULT_LINE = "%s ; %d";
     public static final String CUSTOMER_SEARCH_NO_SELECTION = "No customer selected.";
+
+    public static final String CUSTOMER_MANAGER_WINDOW_TITLE = "Customer Manage";
+    public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_ID = "Customer ID\n%d";
+    public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_NAME = "Name\n%s";
+    public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_ADDRESS = "Address\n%s";
+    public static final String CUSTOMER_MANAGER_WINDOW_CUSTOMER_PHONE = "Phone\n%s";
 }

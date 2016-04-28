@@ -42,34 +42,41 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
 
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
+        container.add(Box.createHorizontalStrut(Dimensions.LARGE_GAP.width));
+
         infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+
         customerIdArea = new JTextArea(
                 String.format(Strings.CUSTOMER_MANAGER_WINDOW_CUSTOMER_ID, customer.getId()));
         processInfoComponent(customerIdArea);
+
         customerNameArea = new JTextArea(
                 String.format(Strings.CUSTOMER_MANAGER_WINDOW_CUSTOMER_NAME, customer.getName()));
         processInfoComponent(customerNameArea);
+
         customerAddressArea = new JTextArea(
                 String.format(Strings.CUSTOMER_MANAGER_WINDOW_CUSTOMER_ADDRESS, customer.getAddress()));
         processInfoComponent(customerAddressArea);
+
         customerPhoneArea = new JTextArea(
                 String.format(Strings.CUSTOMER_MANAGER_WINDOW_CUSTOMER_PHONE, customer.getPhone()));
         processInfoComponent(customerPhoneArea);
+
         createTransactionButton = new JButton(Strings.CUSTOMER_MANAGER_CREATE_TRANSACTION_BUTTON_TITLE);
         createTransactionButton.setMaximumSize(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_SIZE);
         createTransactionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        createTransactionButton.addActionListener(event -> {
-            new CreateTransactionWindow(session, customer);
-        });
+        createTransactionButton.addActionListener(event -> new CreateTransactionWindow(session, customer));
         infoPanel.add(createTransactionButton);
-        container.add(infoPanel);
 
-        // TODO add an info account panel
+        container.add(infoPanel);
 
         accountPanel = new JPanel();
         accountPanel.setLayout(new BoxLayout(accountPanel, BoxLayout.Y_AXIS));
-        accountViews = new ArrayList<>(customer.getAccounts().size());
+        accountViews = new ArrayList<>(customer.getAccounts().size() + 1);
+        AccountView infoView = new AccountView();
+        accountViews.add(infoView);
+        accountPanel.add(infoView);
         customer.getAccounts().forEach(account -> {
             AccountView accountView = new AccountView(account, CustomerManagerWindow.this);
             accountViews.add(accountView);
@@ -84,6 +91,7 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
         textArea.setEnabled(false);
         textArea.setMaximumSize(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_SIZE);
         textArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+        textArea.setDisabledTextColor(Color.BLACK);
         textArea.setBorder(new EmptyBorder(Dimensions.CUSTOMER_MANAGER_INFO_COMPONENT_BORDER));
         infoPanel.add(textArea);
     }

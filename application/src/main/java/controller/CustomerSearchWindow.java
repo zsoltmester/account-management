@@ -9,10 +9,7 @@ import util.SearchUtil;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The customer search window of the application. Read more in the documentation.
@@ -39,9 +36,11 @@ public class CustomerSearchWindow extends Window {
 
         searchField = new JTextField(Strings.CUSTOMER_SEARCH_SEARCH_FIELD_DEFAULT);
         addComponentToBoxLayout(searchField, Dimensions.CUSTOMER_SEARCH_WINDOW_COMPONENT_SIZE);
+
         searchButton = new JButton(Strings.CUSTOMER_SEARCH_SEARCH_BUTTON_TITLE);
         searchButton.addActionListener(new OnSearchButtonClickListener());
         addComponentToBoxLayout(searchButton, Dimensions.CUSTOMER_SEARCH_WINDOW_COMPONENT_SIZE);
+
         chooser = new ButtonGroup();
         okButton = new JButton(Strings.OK);
         okButton.addActionListener(new OnOkButtonClickListener());
@@ -56,10 +55,10 @@ public class CustomerSearchWindow extends Window {
         @Override
         public void actionPerformed(ActionEvent event) {
             if (options != null) {
-                for (JRadioButton option : options) {
+                options.forEach(option -> {
                     chooser.remove(option);
                     container.remove(option);
-                }
+                });
                 options = null;
                 okButton.setEnabled(false);
                 repaint();
@@ -74,14 +73,15 @@ public class CustomerSearchWindow extends Window {
             }
 
             options = new ArrayList<>(founded.size());
-            for (Long foundedId : founded) {
+            founded.forEach(foundedId -> {
                 JRadioButton option = new JRadioButton(String.format(Strings.CUSTOMER_SEARCH_RESULT_LINE,
                         strippedCustomers.get(foundedId), foundedId));
                 option.putClientProperty(OPTION_PROPERTY_KEY, foundedId);
                 options.add(option);
                 chooser.add(option);
                 addComponentToBoxLayout(option, Dimensions.CUSTOMER_SEARCH_WINDOW_OPTION_SIZE);
-            }
+            });
+
             okButton.setEnabled(true);
             repaint();
         }
@@ -90,16 +90,11 @@ public class CustomerSearchWindow extends Window {
     private class OnOkButtonClickListener implements ActionListener {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
-            JRadioButton selected = null;
-            for (JRadioButton option : options) {
-                if (option.isSelected()) {
-                    selected = option;
-                    break;
-                }
-            }
-
-            if (selected == null) {
+        public void actionPerformed(ActionEvent event) {
+            JRadioButton selected;
+            try {
+                selected = options.stream().filter(option -> option.isSelected()).findFirst().get();
+            } catch (NoSuchElementException e) {
                 JOptionPane.showMessageDialog(container, Strings.CUSTOMER_SEARCH_NO_SELECTION,
                         null, JOptionPane.WARNING_MESSAGE);
                 return;

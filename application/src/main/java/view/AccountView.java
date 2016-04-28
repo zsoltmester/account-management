@@ -11,7 +11,7 @@ import java.awt.*;
 /**
  * A view can display an account.
  */
-public class AccountView extends JPanel {
+public class AccountView extends EntityView {
 
     private Account account;
 
@@ -24,6 +24,13 @@ public class AccountView extends JPanel {
     private JButton transactionHistoryButton;
 
     /**
+     * Creates a new info account view.
+     */
+    public AccountView() {
+        this(null, null);
+    }
+
+    /**
      * Creates a new account view based on the given account.
      *
      * @param account  The account to display.
@@ -34,42 +41,41 @@ public class AccountView extends JPanel {
         this.listener = listener;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         add(Box.createVerticalStrut(Dimensions.GAP.height));
-        idField = new JTextField(account.getId());
+
+        idField = new JTextField(account == null ? Strings.ACCOUNT_ID : account.getId());
         processField(idField);
-        balanceField = new JTextField(account.getBalance().toString());
+
+        balanceField = new JTextField(account == null ? Strings.ACCOUNT_BALANCE : account.getBalance().toString());
         processField(balanceField);
-        creationField = new JTextField(Configs.ACCOUNT_CREATION_DATE_FORMAT.format(account.getCreationDate()));
+
+        creationField = new JTextField(account == null ? Strings.ACCOUNT_CREATION_DATE
+                : Configs.ACCOUNT_CREATION_DATE_FORMAT.format(account.getCreationDate()));
         processField(creationField);
-        changeStatusButton = new JButton(account.isActive() ? Strings.ACCOUNT_DEACTIVATE : Strings.ACCOUNT_ACTIVATE);
-        changeStatusButton.addActionListener(event -> {
-            listener.onChangeStatusClicked(account);
-        });
-        processButton(changeStatusButton);
-        transactionHistoryButton = new JButton(Strings.ACCOUNT_TRANSACTION_HISTORY_BUTTON);
-        transactionHistoryButton.addActionListener(event -> {
-            listener.onTransactionHistoryClicked(account);
-        });
-        processButton(transactionHistoryButton);
+
+        if (account != null) {
+            changeStatusButton = new JButton(account.isActive() ? Strings.ACCOUNT_DEACTIVATE : Strings.ACCOUNT_ACTIVATE);
+            changeStatusButton.addActionListener(event -> {
+                listener.onChangeStatusClicked(account);
+            });
+            processButton(changeStatusButton);
+
+            transactionHistoryButton = new JButton(Strings.ACCOUNT_TRANSACTION_HISTORY_BUTTON);
+            transactionHistoryButton.addActionListener(event -> {
+                listener.onTransactionHistoryClicked(account);
+            });
+            processButton(transactionHistoryButton);
+        }
+
         add(Box.createVerticalStrut(Dimensions.GAP.height));
     }
 
-    // TODO code duplication with the TransactionView#processField(...)
-    private void processField(JTextField field) {
-        field.setEnabled(false);
-        field.setAlignmentX(Component.CENTER_ALIGNMENT);
-        field.setHorizontalAlignment(JTextField.CENTER);
-        field.setMaximumSize(Dimensions.ACCOUNT_COMPONENT_SIZE);
-        field.setDisabledTextColor(Color.BLACK);
-        field.setBackground(account.isActive() ? Color.GREEN : Color.RED);
+    @Override
+    protected void processField(JTextField field) {
+        super.processField(field);
+        field.setBackground(account == null ? Color.BLUE : account.isActive() ? Color.GREEN : Color.RED);
         add(field);
-    }
-
-    // TODO code duplication with the TransactionView#processButton(...)
-    private void processButton(JButton button) {
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(Dimensions.ACCOUNT_COMPONENT_SIZE);
-        add(button);
     }
 
     /**

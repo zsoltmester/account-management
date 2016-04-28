@@ -5,7 +5,7 @@ import model.entity.Transaction;
 import java.util.List;
 import java.util.Random;
 
-// TODO add unit test after database integration
+// TODO add unit tests after database integration
 /**
  * Contains transaction related actions.
  */

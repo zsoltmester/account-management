@@ -11,11 +11,25 @@ import java.awt.*;
 /**
  * A view can display an account.
  */
-public class TransactionView extends JPanel {
+public class TransactionView extends EntityView {
 
     private Transaction transaction;
 
     private OnTransactionClickedListener listener;
+
+    private JTextField idField;
+    private JTextField sourceField;
+    private JTextField targetField;
+    private JTextField amountField;
+    private JTextField creationField;
+    private JButton cancelButton;
+
+    /**
+     * Creates a new info transaction view.
+     */
+    public TransactionView() {
+        this(null, null);
+    }
 
     /**
      * Creates a new transaction view based on the given transaction.
@@ -28,40 +42,39 @@ public class TransactionView extends JPanel {
         this.listener = listener;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         add(Box.createVerticalStrut(Dimensions.GAP.height));
-        JTextField idField = new JTextField(Long.toString(transaction.getId()));
+
+        idField = new JTextField(transaction == null ? Strings.TRANSACTION_ID : Long.toString(transaction.getId()));
         processField(idField);
-        JTextField sourceField = new JTextField(transaction.getSourceAccount());
+
+        sourceField = new JTextField(transaction == null ? Strings.TRANSACTION_SOURCE : transaction.getSourceAccount());
         processField(sourceField);
-        JTextField targetField = new JTextField(transaction.getTargetAccount());
+
+        targetField = new JTextField(transaction == null ? Strings.TRANSACTION_TARGET : transaction.getTargetAccount());
         processField(targetField);
-        JTextField amountField = new JTextField(transaction.getAmount().toString());
+
+        amountField = new JTextField(transaction == null ? Strings.TRANSACTION_AMOUNT : transaction.getAmount().toString());
         processField(amountField);
-        JTextField creationField = new JTextField(Configs.TRANSACTION_CREATION_DATE_FORMAT.format(transaction.getCreationDate()));
+
+        creationField = new JTextField(transaction == null ? Strings.TRANSACTION_CREATION_DATE
+                : Configs.TRANSACTION_CREATION_DATE_FORMAT.format(transaction.getCreationDate()));
         processField(creationField);
-        JButton cancelButton = new JButton(Strings.TRANSACTION_HISTORY_CANCEL_BUTTON_TITLE);
-        cancelButton.addActionListener(event -> {
-            listener.onCancelClicked(transaction);
-        });
-        processButton(cancelButton);
+
+        if (transaction != null) {
+            cancelButton = new JButton(Strings.TRANSACTION_HISTORY_CANCEL_BUTTON_TITLE);
+            cancelButton.addActionListener(event -> listener.onCancelClicked(transaction));
+            processButton(cancelButton);
+        }
+
         add(Box.createVerticalStrut(Dimensions.GAP.height));
     }
 
-    // TODO code duplication with the AccountView#processField(...)
-    private void processField(JTextField field) {
-        field.setEnabled(false);
-        field.setAlignmentX(Component.CENTER_ALIGNMENT);
-        field.setHorizontalAlignment(JTextField.CENTER);
-        field.setMaximumSize(Dimensions.TRANSACTION_COMPONENT_SIZE);
-        field.setDisabledTextColor(Color.BLACK);
+    @Override
+    protected void processField(JTextField field) {
+        super.processField(field);
+        field.setBackground(transaction == null ? Color.BLUE : Color.GREEN);
         add(field);
-    }
-
-    // TODO code duplication with the AccountView#processButton(...)
-    private void processButton(JButton button) {
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(Dimensions.TRANSACTION_COMPONENT_SIZE);
-        add(button);
     }
 
     /**

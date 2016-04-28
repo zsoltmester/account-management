@@ -28,8 +28,10 @@ public class LoginWindow extends Window {
 
         userField = new JTextField(Strings.LOGIN_WINDOW_USER_FIELD_DEFAULT);
         addComponentToBoxLayout(userField, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
+
         passwordField = new JTextField(Strings.LOGIN_WINDOW_PASSWORD_FIELD_DEFAULT);
         addComponentToBoxLayout(passwordField, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);
+
         loginButton = new JButton(Strings.LOGIN_WINDOW_LOGIN_BUTTON_TITLE);
         loginButton.addActionListener(new OnLoginButtonClickListener());
         addComponentToBoxLayout(loginButton, Dimensions.LOGIN_WINDOW_COMPONENT_SIZE);

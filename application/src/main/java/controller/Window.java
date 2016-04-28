@@ -9,14 +9,10 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-// TODO Solve the window closing bug.
-// TODO Solve the too many icons bug.
-
 /**
  * The base class for the windows, which manage the main {@link JFrame} and the {@link #session}.
  */
 abstract class Window implements WindowListener, Session.SessionListener {
-
 
     /**
      * The session associated with this window.
@@ -45,7 +41,7 @@ abstract class Window implements WindowListener, Session.SessionListener {
 
         frame = new JFrame(Strings.TITLE_PREFIX + title);
         container = frame.getContentPane();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(Dimensions.WINDOW_MINIMUM_SIZE);
     }
 

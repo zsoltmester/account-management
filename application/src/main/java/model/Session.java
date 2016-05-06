@@ -2,6 +2,7 @@ package model;
 
 import model.manager.UserManager;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**

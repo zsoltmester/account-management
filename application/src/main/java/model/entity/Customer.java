@@ -1,6 +1,6 @@
 package model.entity;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * The customer entity.
@@ -15,7 +15,7 @@ public class Customer {
 
     private String phone;
 
-    private List<Account> accounts;
+    private Set<Account> accounts;
 
     /**
      * Creates a new customer based on the given params.
@@ -26,7 +26,7 @@ public class Customer {
      * @param phone    The phone number of the customer.
      * @param accounts The accounts of the customer.
      */
-    public Customer(long id, String name, String address, String phone, List<Account> accounts) {
+    public Customer(long id, String name, String address, String phone, Set<Account> accounts) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -75,7 +75,7 @@ public class Customer {
      *
      * @return The accounts of this customer.
      */
-    public List<Account> getAccounts() {
+    public Set<Account> getAccounts() {
         return accounts;
     }
 }

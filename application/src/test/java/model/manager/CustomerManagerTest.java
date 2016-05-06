@@ -1,8 +1,10 @@
 package model.manager;
 
 import model.entity.Customer;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -12,6 +14,11 @@ import static org.junit.Assert.*;
  */
 public class CustomerManagerTest {
 
+    @BeforeClass
+    public static void connectDatabase() throws SQLException {
+        DatabaseManager.connect();
+    }
+
     @Test
     public void integrity() {
         Map<Long, String> strippedCustomers = CustomerManager.getStrippedCustomers();
@@ -19,7 +26,7 @@ public class CustomerManagerTest {
         assertTrue(strippedCustomers.size() > 0);
         strippedCustomers.forEach((id, name) -> {
             assertNotNull(name);
-            assertTrue(id >= 0);
+            assertTrue(id > 0);
             Customer customer = CustomerManager.getCustomer(id);
             assertNotNull(customer);
             assertTrue(customer.getId() == id);
@@ -28,7 +35,7 @@ public class CustomerManagerTest {
 
     @Test
     public void getCustomer() {
-        assertNull(CustomerManager.getCustomer(-1));
-        assertNotNull(CustomerManager.getCustomer(0));
+        assertNull(CustomerManager.getCustomer(0));
+        assertNotNull(CustomerManager.getCustomer(1));
     }
 }

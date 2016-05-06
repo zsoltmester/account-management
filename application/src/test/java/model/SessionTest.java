@@ -1,8 +1,11 @@
 package model;
 
+import model.manager.DatabaseManager;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.Base64;
 
 import static org.junit.Assert.*;
@@ -11,6 +14,11 @@ import static org.junit.Assert.*;
  * Test cases for the {@link Session} class.
  */
 public class SessionTest {
+
+    @BeforeClass
+    public static void connectDatabase() throws SQLException {
+        DatabaseManager.connect();
+    }
 
     private Session session;
 

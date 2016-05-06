@@ -43,7 +43,7 @@ public class CreateTransactionWindow extends Window {
         addComponentToBoxLayout(sourceAccountsArea, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SMALLER_SIZE);
         sources = new ArrayList<>(customer.getAccounts().size());
         customer.getAccounts().forEach(account -> {
-            JCheckBox source = new JCheckBox(account.getId());
+            JCheckBox source = new JCheckBox(account.getNumber());
             sources.add(source);
             addComponentToBoxLayout(source, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SMALLER_SIZE);
         });

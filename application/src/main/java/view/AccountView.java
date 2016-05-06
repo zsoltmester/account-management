@@ -18,6 +18,7 @@ public class AccountView extends EntityView {
     private OnAccountClickListener listener;
 
     private JTextField idField;
+    private JTextField numberField;
     private JTextField balanceField;
     private JTextField creationField;
     private JButton changeStatusButton;
@@ -44,8 +45,11 @@ public class AccountView extends EntityView {
 
         add(Box.createVerticalStrut(Dimensions.GAP.height));
 
-        idField = new JTextField(account == null ? Strings.ACCOUNT_ID : account.getId());
+        idField = new JTextField(account == null ? Strings.ACCOUNT_ID : Long.toString(account.getId()));
         processField(idField);
+
+        numberField = new JTextField(account == null ? Strings.ACCOUNT_NUMBER : account.getNumber());
+        processField(numberField);
 
         balanceField = new JTextField(account == null ? Strings.ACCOUNT_BALANCE : account.getBalance().toString());
         processField(balanceField);

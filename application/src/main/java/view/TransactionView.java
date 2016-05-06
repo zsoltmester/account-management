@@ -48,13 +48,16 @@ public class TransactionView extends EntityView {
         idField = new JTextField(transaction == null ? Strings.TRANSACTION_ID : Long.toString(transaction.getId()));
         processField(idField);
 
-        sourceField = new JTextField(transaction == null ? Strings.TRANSACTION_SOURCE : transaction.getSourceAccount());
+        sourceField = new JTextField(transaction == null
+                ? Strings.TRANSACTION_SOURCE : Long.toString(transaction.getSourceAccount()));
         processField(sourceField);
 
-        targetField = new JTextField(transaction == null ? Strings.TRANSACTION_TARGET : transaction.getTargetAccount());
+        targetField = new JTextField(transaction == null
+                ? Strings.TRANSACTION_TARGET : Long.toString(transaction.getTargetAccount()));
         processField(targetField);
 
-        amountField = new JTextField(transaction == null ? Strings.TRANSACTION_AMOUNT : transaction.getAmount().toString());
+        amountField = new JTextField(transaction == null
+                ? Strings.TRANSACTION_AMOUNT : transaction.getAmount().toString());
         processField(amountField);
 
         creationField = new JTextField(transaction == null ? Strings.TRANSACTION_CREATION_DATE

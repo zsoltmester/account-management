@@ -10,9 +10,9 @@ public class Transaction {
 
     private long id;
 
-    private String sourceAccount;
+    private long sourceAccount;
 
-    private String targetAccount;
+    private long targetAccount;
 
     private BigDecimal amount;
 
@@ -27,7 +27,7 @@ public class Transaction {
      * @param amount        The amount.
      * @param creationDate  The creation date.
      */
-    public Transaction(long id, String sourceAccount, String targetAccount, BigDecimal amount, Date creationDate) {
+    public Transaction(long id, long sourceAccount, long targetAccount, BigDecimal amount, Date creationDate) {
         this.id = id;
         this.sourceAccount = sourceAccount;
         this.targetAccount = targetAccount;
@@ -49,7 +49,7 @@ public class Transaction {
      *
      * @return The source account ID.
      */
-    public String getSourceAccount() {
+    public long getSourceAccount() {
         return sourceAccount;
     }
 
@@ -58,7 +58,7 @@ public class Transaction {
      *
      * @return The target account ID.
      */
-    public String getTargetAccount() {
+    public long getTargetAccount() {
         return targetAccount;
     }
 
@@ -78,5 +78,21 @@ public class Transaction {
      */
     public Date getCreationDate() {
         return creationDate;
+    }
+
+    @Override
+    public boolean equals(Object rhs) {
+        if (this == rhs) return true;
+        if (rhs == null || getClass() != rhs.getClass()) return false;
+
+        Transaction transaction = (Transaction) rhs;
+
+        return id == transaction.getId();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 }

@@ -10,13 +10,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The transaction overview window of the application. Read more in the documentation.
  */
 public class TransactionOverviewWindow extends Window implements TransactionView.OnTransactionClickedListener {
 
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions;
 
     private List<TransactionView> transactionViews;
 
@@ -29,7 +30,7 @@ public class TransactionOverviewWindow extends Window implements TransactionView
      * @param session      The current session.
      * @param transactions The transaction to display.
      */
-    public TransactionOverviewWindow(Session session, List<Transaction> transactions) {
+    public TransactionOverviewWindow(Session session, Set<Transaction> transactions) {
         super(Strings.TRANSACTION_HISTORY_WINDOW_TITLE, session);
         this.transactions = transactions;
 

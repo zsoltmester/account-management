@@ -3,13 +3,16 @@ package model.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The account entity.
  */
 public class Account {
 
-    private String id;
+    private long id;
+
+    private String number;
 
     private BigDecimal balance;
 
@@ -17,19 +20,22 @@ public class Account {
 
     private boolean isActive;
 
-    private List<Transaction> transactions;
+    private Set<Transaction> transactions;
 
     /**
      * Creates a new account based on the given params.
      *
      * @param id           The ID of the account.
+     * @param number       The number of the account.
      * @param balance      The account balance.
      * @param creationDate The account creation date.
      * @param isActive     The account is active or not.
      * @param transactions The account related transactions.
      */
-    public Account(String id, BigDecimal balance, Date creationDate, boolean isActive, List<Transaction> transactions) {
+    public Account(long id, String number, BigDecimal balance, Date creationDate, boolean isActive,
+                   Set<Transaction> transactions) {
         this.id = id;
+        this.number = number;
         this.balance = balance;
         this.creationDate = creationDate;
         this.isActive = isActive;
@@ -41,8 +47,17 @@ public class Account {
      *
      * @return The ID of this account.
      */
-    public String getId() {
+    public long getId() {
         return id;
+    }
+
+    /**
+     * Returns the number of this account.
+     *
+     * @return The numbre of this account.
+     */
+    public String getNumber() {
+        return number;
     }
 
     /**
@@ -77,7 +92,23 @@ public class Account {
      *
      * @return The transactions related to this account.
      */
-    public List<Transaction> getTransactions() {
+    public Set<Transaction> getTransactions() {
         return transactions;
+    }
+
+    @Override
+    public boolean equals(Object rhs) {
+        if (this == rhs) return true;
+        if (rhs == null || getClass() != rhs.getClass()) return false;
+
+        Account account = (Account) rhs;
+
+        return id == account.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 }

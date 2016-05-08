@@ -43,16 +43,18 @@ public class LoginWindow extends Window {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            String user = userField.getText();
-            byte[] password = Base64.getEncoder().encode(passwordField.getText().getBytes());
-            Session session = Session.login(user, password);
-            if (session == null) {
-                JOptionPane.showMessageDialog(container, Strings.LOGIN_WINDOW_INVALID_CREDENTIALS,
-                        Strings.LOGIN_WINDOW_TITLE, JOptionPane.ERROR_MESSAGE);
-            } else {
-                close();
-                new CustomerSearchWindow(session);
-            }
+            new Thread(() -> {
+                String user = userField.getText();
+                byte[] password = Base64.getEncoder().encode(passwordField.getText().getBytes());
+                Session session = Session.login(user, password);
+                if (session == null) {
+                    JOptionPane.showMessageDialog(container, Strings.LOGIN_WINDOW_INVALID_CREDENTIALS,
+                            Strings.LOGIN_WINDOW_TITLE, JOptionPane.ERROR_MESSAGE);
+                } else {
+                    close();
+                    new CustomerSearchWindow(session);
+                }
+            }).start();
         }
     }
 }

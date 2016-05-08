@@ -1,8 +1,9 @@
 package model.manager;
 
-import java.util.Random;
+import resource.Configs;
 
-// TODO add unit tests after database integration
+import java.sql.SQLException;
+
 /**
  * Contains account related actions.
  */
@@ -16,24 +17,27 @@ public class AccountManager extends DatabaseManager {
      * Activate the given account.
      *
      * @param id The ID of the account to activate.
-     * @return <code>true</code>, if the action performed, otherwise <code>false</code>.
      */
-    public static boolean activateAccount(String id) {
-        return changeStatus(true, id);
+    public static void activateAccount(long id) {
+        changeStatus(true, id);
     }
 
     /**
      * Deactivate the given account.
      *
      * @param id The ID of the account to deactivate.
-     * @return <code>true</code>, if the action performed, otherwise <code>false</code>.
      */
-    public static boolean deactivateAccount(String id) {
-        return changeStatus(false, id);
+    public static void deactivateAccount(long id) {
+        changeStatus(false, id);
     }
 
-    private static boolean changeStatus(boolean activate, String id) {
-        // TODO logic requires database
-        return new Random().nextInt() % 2 == 0;
+    private static void changeStatus(boolean activate, long id) {
+        String sql = "update " + Configs.ACCOUNT_TABLE + " set " + Configs.ACCOUNT_TABLE_STATUS_FIELD + " = "
+                + (activate ? "0" : "1") + " where " + Configs.ACCOUNT_TABLE_ID_FIELD + " = " + id;
+        try {
+            executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

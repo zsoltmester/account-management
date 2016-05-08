@@ -3,6 +3,8 @@ package controller;
 import model.Session;
 import model.entity.Account;
 import model.entity.Customer;
+import model.manager.AccountManager;
+import model.manager.CustomerManager;
 import resource.Dimensions;
 import resource.Strings;
 import view.AccountView;
@@ -98,9 +100,16 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
 
     @Override
     public void onChangeStatusClicked(Account account) {
-        // TODO It will be implemented after the database integration.
-        JOptionPane.showMessageDialog(container, Strings.UNAVAILABLE_DIALOG_MESSAGE,
-                Strings.UNAVAILABLE_DIALOG_TITLE, JOptionPane.INFORMATION_MESSAGE);
+        new Thread(() -> {
+            if (account.isActive()) {
+                AccountManager.deactivateAccount(account.getId());
+            } else {
+                AccountManager.activateAccount(account.getId());
+            }
+            reopen(() -> {
+                new CustomerManagerWindow(session, CustomerManager.getCustomer(customer.getId()));
+            });
+        }).start();
     }
 
     @Override

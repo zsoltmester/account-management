@@ -83,8 +83,19 @@ abstract class Window implements WindowListener, Session.SessionListener {
         if (session != null) {
             session.removeListener(this);
         }
+
         frame.setVisible(false);
         frame.dispose();
+    }
+
+    /**
+     * Reopens the window.
+     *
+     * @param runnable Where you hate to instantiate the window again.
+     */
+    protected void reopen(Runnable runnable) {
+        close();
+        runnable.run();
     }
 
     @Override

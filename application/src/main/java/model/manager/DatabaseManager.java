@@ -4,8 +4,6 @@ import resource.Configs;
 
 import java.sql.*;
 
-// TODO Wait the database integration with this.
-
 /**
  * Contains Database related actions for other managers. This is the only class in the application which communicates
  * directly with the database.
@@ -40,5 +38,17 @@ public class DatabaseManager {
         ResultSet resultSet = statement.executeQuery(sql);
         statement.closeOnCompletion();
         return resultSet;
+    }
+
+    /**
+     * Executes the given update statement.
+     *
+     * @param sql The update statement to execute.
+     */
+    protected static void executeUpdate(String sql) throws SQLException {
+        System.out.println("[INFO] Executing update: " + sql);
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        statement.close();
     }
 }

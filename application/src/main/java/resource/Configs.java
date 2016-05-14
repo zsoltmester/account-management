@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat;
  */
 public class Configs {
 
-    public static final SimpleDateFormat ACCOUNT_CREATION_DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
-    public static final SimpleDateFormat TRANSACTION_CREATION_DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+    public static final SimpleDateFormat ACCOUNT_CREATION_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+    public static final SimpleDateFormat TRANSACTION_CREATION_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     public static final String JDBC_CONNECTION_URL = "jdbc:oracle:thin:@tomx.inf.elte.hu:1522/ora11g";
     public static final String JDBC_CONNECTION_USER = "qt3qf8";

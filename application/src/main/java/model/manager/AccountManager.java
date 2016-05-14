@@ -2,6 +2,7 @@ package model.manager;
 
 import resource.Configs;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -39,5 +40,19 @@ public class AccountManager extends DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Returns the account ID for the given account number.
+     *
+     * @param number The account number to query.
+     * @return The account ID for the given account number.
+     */
+    public static Long getIdForNumber(String number) throws SQLException {
+        String sql = "select " + Configs.ACCOUNT_TABLE_ID_FIELD + " from " + Configs.ACCOUNT_TABLE + " where "
+                + Configs.ACCOUNT_TABLE_ACCOUNT_NUMBER_FIELD + " = '" + number + '\'';
+        ResultSet resultSet = executeSelect(sql);
+        resultSet.next();
+        return resultSet.getLong(1);
     }
 }

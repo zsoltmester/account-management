@@ -6,6 +6,7 @@ package resource;
 public class Strings {
 
     public static final String OK = "OK";
+    public static final String ERROR = "ERROR";
 
     public static final String UNAVAILABLE_DIALOG_TITLE = "Unavailable Function";
     public static final String UNAVAILABLE_DIALOG_MESSAGE = "It will be implemented after the database integration.";
@@ -58,6 +59,9 @@ public class Strings {
     public static final String CREATE_TRANSACTION_WINDOW_TITLE = "Send Money";
     public static final String CREATE_TRANSACTION_WINDOW_SOURCE_ACCOUNTS = "Source Accounts:";
     public static final String CREATE_TRANSACTION_WINDOW_TARGET_ACCOUNT_DEFAULT = "Target Account";
-    public static final String CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT = "Balance";
+    public static final String CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT = "Amount for %s";
     public static final String CREATE_TRANSACTION_WINDOW_SEND_BUTTON_TITLE = "Send";
+    public static final String CREATE_TRANSACTION_WINDOW_INVALID_AMOUNT = "Invalid amount";
+    public static final String CREATE_TRANSACTION_WINDOW_ERROR = "Sorry, but something went wrong...";
+    public static final String CREATE_TRANSACTION_WINDOW_CONFIRMATION = "Are you sure?";
 }

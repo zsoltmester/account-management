@@ -2,12 +2,14 @@ package controller;
 
 import model.Session;
 import model.entity.Transaction;
+import model.manager.TransactionManager;
 import resource.Dimensions;
 import resource.Strings;
 import view.TransactionView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -57,8 +59,18 @@ public class TransactionOverviewWindow extends Window implements TransactionView
 
     @Override
     public void onCancelClicked(Transaction transaction) {
-        // TODO It will be implemented after the database integration.
-        JOptionPane.showMessageDialog(container, Strings.UNAVAILABLE_DIALOG_MESSAGE,
-                Strings.UNAVAILABLE_DIALOG_TITLE, JOptionPane.INFORMATION_MESSAGE);
+        try {
+            if (TransactionManager.cancelTransaction(transaction)) {
+                reopen(() -> {
+                    // TODO
+                });
+            } else {
+                JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
+                        Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
+                    Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

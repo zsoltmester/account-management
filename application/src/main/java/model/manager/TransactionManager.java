@@ -1,11 +1,15 @@
 package model.manager;
 
 import model.entity.Transaction;
+import resource.Configs;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
-// TODO add unit tests after database integration
 /**
  * Contains transaction related actions.
  */
@@ -15,47 +19,60 @@ public class TransactionManager extends DatabaseManager {
         super();
     }
 
-    /**
-     * Check if the given transaction can be performed.
-     *
-     * @param transaction The transaction to perform.
-     * @return <code>true</code>, if the transaction can performed, otherwise <code>false</code>.
-     */
-    public static boolean canPerform(Transaction transaction) {
-        // TODO logic requires database
-        return new Random().nextInt() % 2 == 0;
-    }
-
-    /**
-     * Check if the given transactions can be performed at once.
-     *
-     * @param transactions The transactions to perform at once.
-     * @return <code>true</code>, if the transactions can performed at once, otherwise <code>false</code>.
-     */
-    public static boolean canPerform(List<Transaction> transactions) {
-        // TODO logic requires database
-        return new Random().nextInt() % 2 == 0;
+    private static String createInsertStatementForTransaction(long sourceAccount, long targetAccount, BigDecimal amount) {
+        String creationDate = Configs.TRANSACTION_CREATION_DATE_FORMAT.format(new Date());
+        return "insert into " + Configs.TRANSACTION_TABLE + " values " + "(NULL, " + sourceAccount
+                + ", " + targetAccount + ", " + amount + ", TO_DATE('" + creationDate + "','DD-MM-YYYY HH24:MI:SS'))";
     }
 
     /**
      * Perform the given transaction.
      *
-     * @param transaction The transaction to perform.
+     * @param sourceAccount The source account.
+     * @param targetAccount The target account.
+     * @param amount        The amount.
      * @return <code>true</code>, if the transaction performed, otherwise <code>false</code>.
      */
-    public static boolean performTransaction(Transaction transaction) {
-        // TODO logic requires database
-        return new Random().nextInt() % 2 == 0;
+    public static boolean performTransaction(long sourceAccount, long targetAccount, BigDecimal amount)
+            throws SQLException {
+        return executeTransaction(
+                Collections.singletonList(createInsertStatementForTransaction(sourceAccount, targetAccount, amount)));
     }
 
     /**
      * Perform the given transactions at once.
      *
-     * @param transactions The transaction to perform at once.
+     * @param sourceAccounts The source accounts.
+     * @param targetAccount  The target account.
+     * @param amounts        The amounts.
      * @return <code>true</code>, if the transaction performed at once, otherwise <code>false</code>.
      */
-    public static boolean performTransaction(List<Transaction> transactions) {
-        // TODO logic requires database
-        return new Random().nextInt() % 2 == 0;
+    public static boolean performTransaction(List<Long> sourceAccounts, long targetAccount, List<BigDecimal> amounts)
+            throws SQLException {
+        if (sourceAccounts == null || amounts == null || sourceAccounts.size() != amounts.size()
+                || sourceAccounts.size() == 0) {
+            return false;
+        }
+        List<String> statements = new ArrayList<>(sourceAccounts.size());
+        for (int i = 0; i < sourceAccounts.size(); ++i) {
+            statements.add(createInsertStatementForTransaction(sourceAccounts.get(i), targetAccount, amounts.get(i)));
+        }
+        return executeTransaction(statements);
+    }
+
+    /**
+     * Cancels the given transaction, if it's possible.
+     *
+     * @param transaction The transaction to cancel.
+     * @return <code>true</code>, if the transaction successfully canceled, otherwise <code>false</code>.
+     */
+    public static boolean cancelTransaction(Transaction transaction) throws SQLException {
+        if (transaction == null || transaction.getCreationDate() == null
+                || transaction.getCreationDate().getTime() + 12 * 60 * 60 * 1000 - new Date().getTime()
+                < 0) {
+            return false;
+        }
+
+        return performTransaction(transaction.getTargetAccount(), transaction.getSourceAccount(), transaction.getAmount());
     }
 }

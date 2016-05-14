@@ -1,12 +1,17 @@
 package controller;
 
 import model.Session;
+import model.entity.Account;
 import model.entity.Customer;
+import model.manager.AccountManager;
+import model.manager.TransactionManager;
 import resource.Dimensions;
 import resource.Strings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +20,13 @@ import java.util.List;
  */
 public class CreateTransactionWindow extends Window {
 
+    private static final String ACCOUNT_PROPERTY_KEY =
+            CreateTransactionWindow.class.getName() + ":ACCOUNT_PROPERTY_KEY";
+
     private Customer customer;
 
     private List<JCheckBox> sources;
-    private JTextField balanceField;
+    private List<JTextField> amountFields;
     private JTextField targetField;
     private JButton sendButton;
 
@@ -41,9 +49,11 @@ public class CreateTransactionWindow extends Window {
         sourceAccountsArea.setBackground(null);
 
         addComponentToBoxLayout(sourceAccountsArea, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SMALLER_SIZE);
-        sources = new ArrayList<>(customer.getAccounts().size());
-        customer.getAccounts().forEach(account -> {
+        List<Account> accounts = new ArrayList<>(customer.getAccounts());
+        sources = new ArrayList<>(accounts.size());
+        accounts.forEach(account -> {
             JCheckBox source = new JCheckBox(account.getNumber());
+            source.putClientProperty(ACCOUNT_PROPERTY_KEY, account);
             sources.add(source);
             addComponentToBoxLayout(source, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SMALLER_SIZE);
         });
@@ -51,14 +61,52 @@ public class CreateTransactionWindow extends Window {
         targetField = new JTextField(Strings.CREATE_TRANSACTION_WINDOW_TARGET_ACCOUNT_DEFAULT);
         addComponentToBoxLayout(targetField, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE);
 
-        balanceField = new JTextField(Strings.CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT);
-        addComponentToBoxLayout(balanceField, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE);
+        amountFields = new ArrayList<>(sources.size());
+        for (int i = 0; i < sources.size(); ++i) {
+            JTextField amountField = new JTextField(
+                    String.format(Strings.CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT, accounts.get(i).getNumber()));
+            addComponentToBoxLayout(amountField, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE);
+            amountField.putClientProperty(ACCOUNT_PROPERTY_KEY, accounts.get(i));
+            amountFields.add(amountField);
+        }
 
         sendButton = new JButton(Strings.CREATE_TRANSACTION_WINDOW_SEND_BUTTON_TITLE);
         sendButton.addActionListener(event -> {
-            // TODO It will be implemented after the database integration.
-            JOptionPane.showMessageDialog(container, Strings.UNAVAILABLE_DIALOG_MESSAGE,
-                    Strings.UNAVAILABLE_DIALOG_TITLE, JOptionPane.INFORMATION_MESSAGE);
+            List<Long> selectedAccounts = new ArrayList<>();
+            List<BigDecimal> inputAmounts = new ArrayList<>();
+            for (int i = 0; i < sources.size(); ++i) {
+                if (sources.get(i).isSelected()) {
+                    selectedAccounts.add(((Account) sources.get(i).getClientProperty(ACCOUNT_PROPERTY_KEY)).getId());
+                    try {
+                        inputAmounts.add(new BigDecimal(amountFields.get(i).getText()));
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_INVALID_AMOUNT,
+                                Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            int result = JOptionPane.showConfirmDialog(container, Strings.CREATE_TRANSACTION_WINDOW_CONFIRMATION,
+                    Strings.CREATE_TRANSACTION_WINDOW_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+
+            new Thread(() -> {
+                try {
+                    if (TransactionManager.performTransaction(selectedAccounts,
+                            AccountManager.getIdForNumber(targetField.getText()), inputAmounts)) {
+                        close();
+                    } else {
+                        JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
+                                Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException | NumberFormatException e) {
+                    JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
+                            Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+                }
+            }).start();
         });
         addComponentToBoxLayout(sendButton, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE);
 

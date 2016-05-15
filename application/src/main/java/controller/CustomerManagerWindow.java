@@ -40,7 +40,7 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
      * @param customer The customer to display.
      */
     public CustomerManagerWindow(Session session, Customer customer) {
-        super(Strings.CUSTOMER_MANAGER_WINDOW_TITLE, session);
+        super(Strings.CUSTOMER_MANAGER_WINDOW_TITLE, session, true);
         this.customer = customer;
 
         container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));

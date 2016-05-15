@@ -23,7 +23,7 @@ public class LoginWindow extends Window {
      * Displays the login window.
      */
     public LoginWindow() {
-        super(Strings.LOGIN_WINDOW_TITLE, null);
+        super(Strings.LOGIN_WINDOW_TITLE, null, false);
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 

@@ -39,7 +39,7 @@ public class CreateTransactionWindow extends Window {
      * @param session The session.
      */
     public CreateTransactionWindow(Session session, Customer customer) {
-        super(Strings.CREATE_TRANSACTION_WINDOW_TITLE, session);
+        super(Strings.CREATE_TRANSACTION_WINDOW_TITLE, session, false);
         this.customer = customer;
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));

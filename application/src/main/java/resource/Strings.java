@@ -13,6 +13,7 @@ public class Strings {
     public static final String CONFIRM_DIALOG_TITLE = "Warning";
     public static final String CONFIRM_DIALOG_MESSAGE = "Are you sure?";
 
+
     public static final String TITLE_PREFIX = "Account Management - ";
     public static final String SESSION_END_TITLE = "Logout";
     public static final String SESSION_END_MESSAGE = "Your session ended.";
@@ -59,4 +60,10 @@ public class Strings {
     public static final String CREATE_TRANSACTION_WINDOW_TARGET_ACCOUNT_DEFAULT = "Target Account";
     public static final String CREATE_TRANSACTION_WINDOW_BALANCE_DEFAULT = "Amount for %s";
     public static final String CREATE_TRANSACTION_WINDOW_SEND_BUTTON_TITLE = "Send";
+
+    public static final String MENU_GROUP_NAME = "Menu";
+    public static final String MENU_LOGIN = "Login with other user...";
+    public static final String MENU_SEARCH = "Search for customer...";
+    public static final String MENU_REFRESH = "Refresh";
+    public static final String MENU_EXIT = "Exit";
 }

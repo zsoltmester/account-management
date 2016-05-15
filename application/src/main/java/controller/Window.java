@@ -31,8 +31,9 @@ abstract class Window implements WindowListener, Session.SessionListener {
      *
      * @param title   The title. Note, that prefix the title.
      * @param session The session.
+     * @param hasMenu Indicates that the window has manu or not.
      */
-    protected Window(String title, Session session) {
+    protected Window(String title, Session session, boolean hasMenu) {
         this.session = session;
         if (session != null) {
             session.revoke();
@@ -43,7 +44,41 @@ abstract class Window implements WindowListener, Session.SessionListener {
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(Dimensions.WINDOW_MINIMUM_SIZE);
+        frame.setLocationRelativeTo(null);
+        frame.addWindowListener(this);
         Application.addWindow(this);
+
+        if (hasMenu) {
+            initializeMenu();
+        }
+    }
+
+    private void initializeMenu() {
+        JMenu menu = new JMenu(Strings.MENU_GROUP_NAME);
+
+        JMenuItem loginMenuItem = new JMenuItem(Strings.MENU_LOGIN);
+        loginMenuItem.addActionListener(event -> new LoginWindow());
+        menu.add(loginMenuItem);
+
+        JMenuItem searchMenuItem = new JMenuItem(Strings.MENU_SEARCH);
+        searchMenuItem.addActionListener(event -> new CustomerSearchWindow(session));
+        menu.add(searchMenuItem);
+
+        menu.addSeparator();
+
+        JMenuItem refreshMenuItem = new JMenuItem(Strings.MENU_REFRESH);
+        refreshMenuItem.addActionListener(event -> refresh());
+        menu.add(refreshMenuItem);
+
+        menu.addSeparator();
+
+        JMenuItem exitMenuItem = new JMenuItem(Strings.MENU_EXIT);
+        exitMenuItem.addActionListener(event -> close());
+        menu.add(exitMenuItem);
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(menu);
+        frame.setJMenuBar(menuBar);
     }
 
     /**
@@ -81,12 +116,6 @@ abstract class Window implements WindowListener, Session.SessionListener {
      * Closes the window.
      */
     protected void close() {
-        if (session != null) {
-            session.removeListener(this);
-        }
-        Application.removeWindow(this);
-
-        frame.setVisible(false);
         frame.dispose();
     }
 
@@ -102,15 +131,15 @@ abstract class Window implements WindowListener, Session.SessionListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
-        if (session != null) {
-            session.removeListener(this);
-        }
-        Application.removeWindow(this);
+        // Nothing to do.
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        // Nothing to do.
+        if (session != null) {
+            session.removeListener(this);
+        }
+        Application.removeWindow(this);
     }
 
     @Override

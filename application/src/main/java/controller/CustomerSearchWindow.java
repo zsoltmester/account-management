@@ -31,7 +31,7 @@ public class CustomerSearchWindow extends Window {
      * @param session The current session.
      */
     public CustomerSearchWindow(Session session) {
-        super(Strings.CUSTOMER_SEARCH_WINDOW_TITLE, session);
+        super(Strings.CUSTOMER_SEARCH_WINDOW_TITLE, session, true);
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 

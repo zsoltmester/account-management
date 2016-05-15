@@ -33,7 +33,7 @@ public class TransactionOverviewWindow extends Window implements TransactionView
      * @param transactions The transaction to display.
      */
     public TransactionOverviewWindow(Session session, Set<Transaction> transactions) {
-        super(Strings.TRANSACTION_HISTORY_WINDOW_TITLE, session);
+        super(Strings.TRANSACTION_HISTORY_WINDOW_TITLE, session, false);
         this.transactions = transactions;
 
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));

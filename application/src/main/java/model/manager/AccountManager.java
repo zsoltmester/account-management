@@ -18,28 +18,26 @@ public class AccountManager extends DatabaseManager {
      * Activate the given account.
      *
      * @param id The ID of the account to activate.
+     * @return If the activation was successful or not.
      */
-    public static void activateAccount(long id) {
-        changeStatus(true, id);
+    public static boolean activateAccount(long id) {
+        return changeStatus(true, id);
     }
 
     /**
      * Deactivate the given account.
      *
      * @param id The ID of the account to deactivate.
+     * @return If the deactivation was successful or not.
      */
-    public static void deactivateAccount(long id) {
-        changeStatus(false, id);
+    public static boolean deactivateAccount(long id) {
+        return changeStatus(false, id);
     }
 
-    private static void changeStatus(boolean activate, long id) {
+    private static boolean changeStatus(boolean activate, long id) {
         String sql = "update " + Configs.ACCOUNT_TABLE + " set " + Configs.ACCOUNT_TABLE_STATUS_FIELD + " = "
                 + (activate ? "0" : "1") + " where " + Configs.ACCOUNT_TABLE_ID_FIELD + " = " + id;
-        try {
-            executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return executeUpdate(sql);
     }
 
     /**
@@ -48,11 +46,20 @@ public class AccountManager extends DatabaseManager {
      * @param number The account number to query.
      * @return The account ID for the given account number.
      */
-    public static Long getIdForNumber(String number) throws SQLException {
+    public static Long getIdForNumber(String number) {
         String sql = "select " + Configs.ACCOUNT_TABLE_ID_FIELD + " from " + Configs.ACCOUNT_TABLE + " where "
                 + Configs.ACCOUNT_TABLE_ACCOUNT_NUMBER_FIELD + " = '" + number + '\'';
         ResultSet resultSet = executeSelect(sql);
-        resultSet.next();
-        return resultSet.getLong(1);
+        if (resultSet == null) {
+            return null;
+        } else {
+            try {
+                resultSet.next();
+                return resultSet.getLong(1);
+            } catch (SQLException | NullPointerException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     }
 }

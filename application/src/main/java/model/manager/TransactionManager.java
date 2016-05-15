@@ -33,8 +33,7 @@ public class TransactionManager extends DatabaseManager {
      * @param amount        The amount.
      * @return <code>true</code>, if the transaction performed, otherwise <code>false</code>.
      */
-    public static boolean performTransaction(long sourceAccount, long targetAccount, BigDecimal amount)
-            throws SQLException {
+    public static boolean performTransaction(long sourceAccount, long targetAccount, BigDecimal amount) {
         return executeTransaction(
                 Collections.singletonList(createInsertStatementForTransaction(sourceAccount, targetAccount, amount)));
     }
@@ -47,8 +46,7 @@ public class TransactionManager extends DatabaseManager {
      * @param amounts        The amounts.
      * @return <code>true</code>, if the transaction performed at once, otherwise <code>false</code>.
      */
-    public static boolean performTransaction(List<Long> sourceAccounts, long targetAccount, List<BigDecimal> amounts)
-            throws SQLException {
+    public static boolean performTransaction(List<Long> sourceAccounts, long targetAccount, List<BigDecimal> amounts) {
         if (sourceAccounts == null || amounts == null || sourceAccounts.size() != amounts.size()
                 || sourceAccounts.size() == 0) {
             return false;
@@ -66,7 +64,7 @@ public class TransactionManager extends DatabaseManager {
      * @param transaction The transaction to cancel.
      * @return <code>true</code>, if the transaction successfully canceled, otherwise <code>false</code>.
      */
-    public static boolean cancelTransaction(Transaction transaction) throws SQLException {
+    public static boolean cancelTransaction(Transaction transaction) {
         if (transaction == null || transaction.getCreationDate() == null
                 || transaction.getCreationDate().getTime() + 12 * 60 * 60 * 1000 - new Date().getTime()
                 < 0) {

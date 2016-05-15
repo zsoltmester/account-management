@@ -20,12 +20,18 @@ public class DatabaseManager {
     /**
      * Connect to the database.
      *
-     * @throws SQLException In case of database error.
+     * @return If the connection was successful or not.
      */
-    public static void connect() throws SQLException {
-        DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
-        connection = DriverManager.getConnection(Configs.JDBC_CONNECTION_URL, Configs.JDBC_CONNECTION_USER,
-                Configs.JDBC_CONNECTION_PASSWORD);
+    public static boolean connect() {
+        try {
+            DriverManager.registerDriver(new oracle.jdbc.driver.OracleDriver());
+            connection = DriverManager.getConnection(Configs.JDBC_CONNECTION_URL, Configs.JDBC_CONNECTION_USER,
+                    Configs.JDBC_CONNECTION_PASSWORD);
+            return connection != null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 
@@ -33,38 +39,48 @@ public class DatabaseManager {
      * Executes the given select statement.
      *
      * @param sql The select statement to execute.
-     * @return The result of the query. Never <code>null</code>.
-     * @throws SQLException In case of database error.
+     * @return The result of the query. <code>null</code> in case of error.
      */
-    protected static ResultSet executeSelect(String sql) throws SQLException {
+    protected static ResultSet executeSelect(String sql) {
         System.out.println("[INFO] Executing select: " + sql);
-        connection.setAutoCommit(true);
-        Statement statement = null;
-        ResultSet resultSet;
         try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            statement.closeOnCompletion();
-        } catch (SQLException e) {
-            if (statement != null) {
-                statement.close();
+            connection.setAutoCommit(true);
+            Statement statement = null;
+            ResultSet resultSet;
+            try {
+                statement = connection.createStatement();
+                resultSet = statement.executeQuery(sql);
+                statement.closeOnCompletion();
+            } catch (SQLException e) {
+                if (statement != null) {
+                    statement.close();
+                }
+                throw e;
             }
-            throw e;
+            return resultSet;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     /**
      * Executes the given update statement.
      *
      * @param sql The update statement to execute.
-     * @throws SQLException In case of database error.
+     * @return If the update was successful or not.
      */
-    protected static void executeUpdate(String sql) throws SQLException {
+    protected static boolean executeUpdate(String sql) {
         System.out.println("[INFO] Executing update: " + sql);
-        connection.setAutoCommit(true);
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
+        try {
+            connection.setAutoCommit(true);
+            try (Statement statement = connection.createStatement()) {
+                statement.executeUpdate(sql);
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -73,21 +89,25 @@ public class DatabaseManager {
      *
      * @param statements The statements to execute.
      * @return If the transaction performed or not.
-     * @throws SQLException In case of database error.
      */
-    protected static boolean executeTransaction(List<String> statements) throws SQLException {
-        connection.setAutoCommit(false);
-        Savepoint savepoint = connection.setSavepoint();
-        try (Statement statement = connection.createStatement()) {
-            for (String sql : statements) {
-                System.out.println("[INFO] Executing statement in a transaction: " + sql);
-                statement.execute(sql);
+    protected static boolean executeTransaction(List<String> statements) {
+        try {
+            connection.setAutoCommit(false);
+            Savepoint savepoint = connection.setSavepoint();
+            try (Statement statement = connection.createStatement()) {
+                for (String sql : statements) {
+                    System.out.println("[INFO] Executing statement in a transaction: " + sql);
+                    statement.execute(sql);
+                }
+            } catch (SQLException e) {
+                connection.rollback(savepoint);
+                return false;
             }
+            connection.commit();
+            return true;
         } catch (SQLException e) {
-            connection.rollback(savepoint);
+            e.printStackTrace();
             return false;
         }
-        connection.commit();
-        return true;
     }
 }

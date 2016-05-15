@@ -3,6 +3,7 @@ package controller;
 import model.Session;
 import resource.Dimensions;
 import resource.Strings;
+import util.DialogUtil;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -48,8 +49,7 @@ public class LoginWindow extends Window {
                 byte[] password = Base64.getEncoder().encode(passwordField.getText().getBytes());
                 Session session = Session.login(user, password);
                 if (session == null) {
-                    JOptionPane.showMessageDialog(container, Strings.LOGIN_WINDOW_INVALID_CREDENTIALS,
-                            Strings.LOGIN_WINDOW_TITLE, JOptionPane.ERROR_MESSAGE);
+                    DialogUtil.showErrorDialog(container);
                 } else {
                     close();
                     new CustomerSearchWindow(session);

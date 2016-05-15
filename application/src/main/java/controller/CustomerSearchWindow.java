@@ -4,6 +4,7 @@ import model.Session;
 import model.manager.CustomerManager;
 import resource.Dimensions;
 import resource.Strings;
+import util.DialogUtil;
 import util.SearchUtil;
 
 import javax.swing.*;
@@ -54,36 +55,37 @@ public class CustomerSearchWindow extends Window {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            if (options != null) {
-                options.forEach(option -> {
-                    chooser.remove(option);
-                    container.remove(option);
+            new Thread(() -> {
+                if (options != null) {
+                    options.forEach(option -> {
+                        chooser.remove(option);
+                        container.remove(option);
+                    });
+                    options = null;
+                    okButton.setEnabled(false);
+                    repaint();
+                }
+
+                Map<Long, String> strippedCustomers = CustomerManager.getStrippedCustomers();
+                Set<Long> founded = SearchUtil.searchForCustomer(strippedCustomers, searchField.getText());
+                if (founded.isEmpty()) {
+                    DialogUtil.showErrorDialog(container);
+                    return;
+                }
+
+                options = new ArrayList<>(founded.size());
+                founded.forEach(foundedId -> {
+                    JRadioButton option = new JRadioButton(String.format(Strings.CUSTOMER_SEARCH_RESULT_LINE,
+                            strippedCustomers.get(foundedId), foundedId));
+                    option.putClientProperty(OPTION_PROPERTY_KEY, foundedId);
+                    options.add(option);
+                    chooser.add(option);
+                    addComponentToBoxLayout(option, Dimensions.CUSTOMER_SEARCH_WINDOW_OPTION_SIZE);
                 });
-                options = null;
-                okButton.setEnabled(false);
+
+                okButton.setEnabled(true);
                 repaint();
-            }
-
-            Map<Long, String> strippedCustomers = CustomerManager.getStrippedCustomers();
-            Set<Long> founded = SearchUtil.searchForCustomer(strippedCustomers, searchField.getText());
-            if (founded.isEmpty()) {
-                JOptionPane.showMessageDialog(container, Strings.CUSTOMER_SEARCH_NOT_FOUND_MESSAGE,
-                        Strings.CUSTOMER_SEARCH_NOT_FOUND_TITLE, JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            options = new ArrayList<>(founded.size());
-            founded.forEach(foundedId -> {
-                JRadioButton option = new JRadioButton(String.format(Strings.CUSTOMER_SEARCH_RESULT_LINE,
-                        strippedCustomers.get(foundedId), foundedId));
-                option.putClientProperty(OPTION_PROPERTY_KEY, foundedId);
-                options.add(option);
-                chooser.add(option);
-                addComponentToBoxLayout(option, Dimensions.CUSTOMER_SEARCH_WINDOW_OPTION_SIZE);
-            });
-
-            okButton.setEnabled(true);
-            repaint();
+            }).start();
         }
     }
 
@@ -91,18 +93,19 @@ public class CustomerSearchWindow extends Window {
 
         @Override
         public void actionPerformed(ActionEvent event) {
-            JRadioButton selected;
-            try {
-                selected = options.stream().filter(option -> option.isSelected()).findFirst().get();
-            } catch (NoSuchElementException e) {
-                JOptionPane.showMessageDialog(container, Strings.CUSTOMER_SEARCH_NO_SELECTION,
-                        null, JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            new Thread(() -> {
+                JRadioButton selected;
+                try {
+                    selected = options.stream().filter(AbstractButton::isSelected).findFirst().get();
+                } catch (NoSuchElementException e) {
+                    DialogUtil.showErrorDialog(container);
+                    return;
+                }
 
-            close();
-            new CustomerManagerWindow(session,
-                    CustomerManager.getCustomer((Long) selected.getClientProperty(OPTION_PROPERTY_KEY)));
+                close();
+                new CustomerManagerWindow(session,
+                        CustomerManager.getCustomer((Long) selected.getClientProperty(OPTION_PROPERTY_KEY)));
+            }).start();
         }
     }
 }

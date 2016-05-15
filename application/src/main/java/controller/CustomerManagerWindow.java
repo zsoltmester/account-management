@@ -4,9 +4,9 @@ import model.Session;
 import model.entity.Account;
 import model.entity.Customer;
 import model.manager.AccountManager;
-import model.manager.CustomerManager;
 import resource.Dimensions;
 import resource.Strings;
+import util.DialogUtil;
 import view.AccountView;
 
 import javax.swing.*;
@@ -102,13 +102,21 @@ public class CustomerManagerWindow extends Window implements AccountView.OnAccou
     public void onChangeStatusClicked(Account account) {
         new Thread(() -> {
             if (account.isActive()) {
-                AccountManager.deactivateAccount(account.getId());
+                if (!AccountManager.deactivateAccount(account.getId())) {
+                    DialogUtil.showErrorDialog(container);
+                } else {
+                    // TODO refresh
+                }
             } else {
-                AccountManager.activateAccount(account.getId());
+                if (!AccountManager.activateAccount(account.getId())) {
+                    DialogUtil.showErrorDialog(container);
+                } else {
+                    // TODO refresh
+                }
             }
-            reopen(() -> {
+            /*reopen(() -> {
                 new CustomerManagerWindow(session, CustomerManager.getCustomer(customer.getId()));
-            });
+            });*/
         }).start();
     }
 

@@ -5,11 +5,11 @@ import model.entity.Transaction;
 import model.manager.TransactionManager;
 import resource.Dimensions;
 import resource.Strings;
+import util.DialogUtil;
 import view.TransactionView;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -59,18 +59,13 @@ public class TransactionOverviewWindow extends Window implements TransactionView
 
     @Override
     public void onCancelClicked(Transaction transaction) {
-        try {
-            if (TransactionManager.cancelTransaction(transaction)) {
-                reopen(() -> {
-                    // TODO
-                });
-            } else {
-                JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
-                        Strings.ERROR, JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
-                    Strings.ERROR, JOptionPane.ERROR_MESSAGE);
+        if (!DialogUtil.showConfirmDialog(container)) {
+            return;
+        }
+        if (!TransactionManager.cancelTransaction(transaction)) {
+            // TODO refresh
+        } else {
+            DialogUtil.showErrorDialog(container);
         }
     }
 }

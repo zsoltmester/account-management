@@ -7,9 +7,12 @@ import model.manager.AccountManager;
 import model.manager.TransactionManager;
 import resource.Dimensions;
 import resource.Strings;
+import util.DialogUtil;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -71,47 +74,47 @@ public class CreateTransactionWindow extends Window {
         }
 
         sendButton = new JButton(Strings.CREATE_TRANSACTION_WINDOW_SEND_BUTTON_TITLE);
-        sendButton.addActionListener(event -> {
-            List<Long> selectedAccounts = new ArrayList<>();
-            List<BigDecimal> inputAmounts = new ArrayList<>();
-            for (int i = 0; i < sources.size(); ++i) {
-                if (sources.get(i).isSelected()) {
-                    selectedAccounts.add(((Account) sources.get(i).getClientProperty(ACCOUNT_PROPERTY_KEY)).getId());
-                    try {
-                        inputAmounts.add(new BigDecimal(amountFields.get(i).getText()));
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_INVALID_AMOUNT,
-                                Strings.ERROR, JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                }
-            }
-
-            int result = JOptionPane.showConfirmDialog(container, Strings.CREATE_TRANSACTION_WINDOW_CONFIRMATION,
-                    Strings.CREATE_TRANSACTION_WINDOW_TITLE, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (result == JOptionPane.NO_OPTION || result == JOptionPane.CLOSED_OPTION) {
-                return;
-            }
-
-            new Thread(() -> {
-                try {
-                    if (TransactionManager.performTransaction(selectedAccounts,
-                            AccountManager.getIdForNumber(targetField.getText()), inputAmounts)) {
-                        close();
-                    } else {
-                        JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
-                                Strings.ERROR, JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (SQLException | NumberFormatException e) {
-                    JOptionPane.showMessageDialog(container, Strings.CREATE_TRANSACTION_WINDOW_ERROR,
-                            Strings.ERROR, JOptionPane.ERROR_MESSAGE);
-                }
-            }).start();
-        });
+        sendButton.addActionListener(new OnSendButtonClickListener());
         addComponentToBoxLayout(sendButton, Dimensions.CREATE_TRANSACTION_WINDOW_COMPONENT_SIZE);
 
         container.add(Box.createVerticalStrut(Dimensions.GAP.height));
 
         display(Dimensions.CREATE_TRANSACTION_WINDOW_SIZE.width, Dimensions.CREATE_TRANSACTION_WINDOW_SIZE.height);
+    }
+
+    private class OnSendButtonClickListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            new Thread(() -> {
+                List<Long> selectedAccounts = new ArrayList<>();
+                List<BigDecimal> inputAmounts = new ArrayList<>();
+                for (int i = 0; i < sources.size(); ++i) {
+                    if (sources.get(i).isSelected()) {
+                        selectedAccounts.add(((Account) sources.get(i).getClientProperty(ACCOUNT_PROPERTY_KEY)).getId());
+                        try {
+                            inputAmounts.add(new BigDecimal(amountFields.get(i).getText()));
+                        } catch (NumberFormatException e) {
+                            DialogUtil.showErrorDialog(container);
+                            return;
+                        }
+                    }
+                }
+
+                if (DialogUtil.showConfirmDialog(container)) {
+                    return;
+                }
+                try {
+                    if (TransactionManager.performTransaction(selectedAccounts,
+                            AccountManager.getIdForNumber(targetField.getText()), inputAmounts)) {
+                        // TODO refresh
+                    } else {
+                        DialogUtil.showErrorDialog(container);
+                    }
+                } catch (NumberFormatException e) {
+                    DialogUtil.showErrorDialog(container);
+                }
+            }).start();
+        }
     }
 }

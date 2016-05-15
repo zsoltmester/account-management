@@ -2,6 +2,7 @@ package model.manager;
 
 import model.entity.Account;
 import model.entity.Customer;
+import model.entity.Transaction;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -89,6 +91,17 @@ public class TransactionManagerTest {
 
     @Test
     public void cancelTransaction() throws SQLException {
-        // TODO
+        assertFalse(TransactionManager.cancelTransaction(new Transaction(-1, 1, 1, null, null)));
+
+        Customer customer = CustomerManager.getCustomer(2);
+        List<Account> accounts = new ArrayList<>(customer.getAccounts());
+        assertTrue(accounts.size() >= 1);
+        Account oldAccount = accounts.get(0);
+        Transaction oldTransaction = oldAccount.getTransactions().stream().filter(transaction ->
+                transaction.getCreationDate().after(new Date(new Date().getTime() - 12 * 60 * 60 * 1000))).findAny().get();
+        if (oldTransaction == null) {
+            return;
+        }
+        assertTrue(TransactionManager.cancelTransaction(oldTransaction));
     }
 }

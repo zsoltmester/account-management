@@ -51,6 +51,12 @@ public class CustomerSearchWindow extends Window {
         display(Dimensions.CUSTOMER_SEARCH_WINDOW_SIZE.width, Dimensions.CUSTOMER_SEARCH_WINDOW_SIZE.height);
     }
 
+    @Override
+    protected void refresh() {
+        close();
+        new CustomerSearchWindow(session);
+    }
+
     private class OnSearchButtonClickListener implements ActionListener {
 
         @Override

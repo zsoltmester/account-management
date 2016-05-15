@@ -40,6 +40,12 @@ public class LoginWindow extends Window {
         display(Dimensions.LOGIN_WINDOW_SIZE.width, Dimensions.LOGIN_WINDOW_SIZE.height);
     }
 
+    @Override
+    protected void refresh() {
+        close();
+        new LoginWindow();
+    }
+
     private class OnLoginButtonClickListener implements ActionListener {
 
         @Override

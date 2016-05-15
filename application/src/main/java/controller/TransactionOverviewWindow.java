@@ -62,10 +62,16 @@ public class TransactionOverviewWindow extends Window implements TransactionView
         if (!DialogUtil.showConfirmDialog(container)) {
             return;
         }
-        if (!TransactionManager.cancelTransaction(transaction)) {
-            // TODO refresh
+        if (TransactionManager.cancelTransaction(transaction)) {
+            refresh();
         } else {
             DialogUtil.showErrorDialog(container);
         }
+    }
+
+    @Override
+    protected void refresh() {
+        close();
+        Application.refreshWindow(CustomerManagerWindow.class);
     }
 }

@@ -43,6 +43,7 @@ abstract class Window implements WindowListener, Session.SessionListener {
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setMinimumSize(Dimensions.WINDOW_MINIMUM_SIZE);
+        Application.addWindow(this);
     }
 
     /**
@@ -83,20 +84,16 @@ abstract class Window implements WindowListener, Session.SessionListener {
         if (session != null) {
             session.removeListener(this);
         }
+        Application.removeWindow(this);
 
         frame.setVisible(false);
         frame.dispose();
     }
 
-    /*
-     * Reopens the window.
-     *
-     * @param runnable Where you hate to instantiate the window again.
-     *
-    protected void reopen(Runnable runnable) {
-        close();
-        runnable.run();
-    }*/
+    /**
+     * Refreshes the window.
+     */
+    protected abstract void refresh();
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -108,6 +105,7 @@ abstract class Window implements WindowListener, Session.SessionListener {
         if (session != null) {
             session.removeListener(this);
         }
+        Application.removeWindow(this);
     }
 
     @Override

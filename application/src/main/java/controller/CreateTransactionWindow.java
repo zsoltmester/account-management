@@ -82,6 +82,12 @@ public class CreateTransactionWindow extends Window {
         display(Dimensions.CREATE_TRANSACTION_WINDOW_SIZE.width, Dimensions.CREATE_TRANSACTION_WINDOW_SIZE.height);
     }
 
+    @Override
+    protected void refresh() {
+        close();
+        Application.refreshWindow(CustomerManagerWindow.class);
+    }
+
     private class OnSendButtonClickListener implements ActionListener {
 
         @Override
@@ -101,13 +107,14 @@ public class CreateTransactionWindow extends Window {
                     }
                 }
 
-                if (DialogUtil.showConfirmDialog(container)) {
+                if (!DialogUtil.showConfirmDialog(container)) {
                     return;
                 }
+
                 try {
                     if (TransactionManager.performTransaction(selectedAccounts,
                             AccountManager.getIdForNumber(targetField.getText()), inputAmounts)) {
-                        // TODO refresh
+                        refresh();
                     } else {
                         DialogUtil.showErrorDialog(container);
                     }

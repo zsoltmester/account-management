@@ -19,15 +19,12 @@ public class Strings {
     public static final String SESSION_END_MESSAGE = "Your session ended.";
 
     public static final String LOGIN_WINDOW_TITLE = "Login";
-    //TODO public static final String LOGIN_WINDOW_USER_FIELD_DEFAULT = "Username";
-    public static final String LOGIN_WINDOW_USER_FIELD_DEFAULT = "admin";
-    //TODO public static final String LOGIN_WINDOW_PASSWORD_FIELD_DEFAULT = "Password";
-    public static final String LOGIN_WINDOW_PASSWORD_FIELD_DEFAULT = "admin";
+    public static final String LOGIN_WINDOW_USER_FIELD_DEFAULT = "Username";
+    public static final String LOGIN_WINDOW_PASSWORD_FIELD_DEFAULT = "Password";
     public static final String LOGIN_WINDOW_LOGIN_BUTTON_TITLE = "Login";
 
     public static final String CUSTOMER_SEARCH_WINDOW_TITLE = "Customer Search";
-    // TODO public static final String CUSTOMER_SEARCH_SEARCH_FIELD_DEFAULT = "Customer name";
-    public static final String CUSTOMER_SEARCH_SEARCH_FIELD_DEFAULT = "Cedric";
+    public static final String CUSTOMER_SEARCH_SEARCH_FIELD_DEFAULT = "Customer name";
     public static final String CUSTOMER_SEARCH_SEARCH_BUTTON_TITLE = "Search";
     public static final String CUSTOMER_SEARCH_RESULT_LINE = "%s ; %d";
 

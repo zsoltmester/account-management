@@ -95,7 +95,16 @@ create or replace trigger AM_BIO_TRANS
 before insert on AM_TRANSACTION
 for each row
 when (new.id is null)
+declare
+  source_account AM_ACCOUNT%rowtype;
+  target_account AM_ACCOUNT%rowtype;
 begin
+  select * into source_account from AM_ACCOUNT where id = :new.source_account;
+  select * into target_account from AM_ACCOUNT where id = :new.target_account;
+  if (source_account.status != 0 or target_account.status != 0) then
+    raise_application_error(-20001, 'The source or the target account deactive.');
+  end if;
+  
   select AM_SEQ_TRANS.nextval
   into :new.id
   from dual;
